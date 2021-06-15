@@ -1,0 +1,299 @@
+<div class="ui-fluid">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="card no-margin">
+                <h1>{{userAddStatusName}}</h1>
+                <form novalidate #f="ngForm" (ngSubmit)="addUser()">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 ui-md-6">
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <div class="ui-g-12 ui-md-4"></div>
+                            <div class="ui-g-12 ui-md-4">
+                                <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/users"> </button>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                <button type="submit" pButton label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-12">
+                            <p-accordion [multiple]="true">
+
+                                <p-accordionTab header="User Information" [selected]="true">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="user-name">User Name*</label>
+                                            <input id="user-name" type="text" size="20" pInputText autocomplete="off" [(ngModel)]="userBean.loginName" #loginName="ngModel"
+                                                [readonly]="editFlag" name="loginName" maxlength="50">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="title">Title</label>
+                                            <input id="title" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.title" #title="ngModel" [readonly]="editFlag"
+                                                name="title" maxlength="10">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="first-name">First Name*</label>
+                                            <input id="first-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.firstName" #firstName="ngModel"
+                                                [readonly]="editFlag" name="firstName" maxlength="50">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="middle-name">Middle Name</label>
+                                            <input id="middle-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.middleName" #middleName="ngModel"
+                                                name="middleName" maxlength="50">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="last-name">Last Name</label>
+                                            <input id="last-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.lastName" #lastName="ngModel"
+                                                [readonly]="editFlag" name="lastName" maxlength="50">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="Birth-Date">Birth Date</label>
+                                            <p-calendar id="Birth-Date" placeholder="Date" [dateFormat]="dateFormat" readonlyInput="true" [(ngModel)]="userBean.birthDate"
+                                                #birthDate="ngModel" name="birthDate" [showIcon]="true"></p-calendar>
+
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="gender">Gender</label>
+                                            <p-dropdown [options]="genderType" [(ngModel)]="userBean.gender" name="gender" [autoWidth]="false" #gender="ngModel" placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="user-type">User Type*</label>
+                                            <p-dropdown [options]="userTypeStatus" [(ngModel)]="userBean.userType" name="user-type" [autoWidth]="false" #usertype="ngModel"
+                                                placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="user-status">User Status*</label>
+                                            <p-dropdown [options]="userStatusNames" [(ngModel)]="userBean.userStatus" name="user-status" [autoWidth]="false" #userStatus="ngModel"
+                                                placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="CustomValue1">Custom Value1</label>
+                                            <input id="CustomeValue1" type="text" size="20" pInputText autocomplete="off" [(ngModel)]="userBean.customValue1" #customValue1="ngModel"
+                                             name="customValue1" maxlength="50">
+
+                                        </div>
+                                       
+                                    </div>
+                                    <!-- </div> -->
+                                </p-accordionTab>
+                            </p-accordion>
+                        </div>
+                        <div class="ui-g-12 ui-md-12">
+                            <p-accordion [multiple]="true">
+
+                                <p-accordionTab header="Contact Information" [selected]="true">
+                                    <!-- <div class="ui-g-12 ui-md-4">
+                           <button type="button" pButton  label="Delete" icon="fa fa-trash" ></button>
+                       </div> -->
+                                    <!-- <div class="ui-g-12 ui-md-8"> {{selectAcount}}-->
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <label for="address-1">Address 1</label>
+                                            <input id="address-1" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.address1" maxlength="100"
+                                                name="address1">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <label for="address-2">Address 2</label>
+                                            <input id="address-2" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.address2" maxlength="100"
+                                                name="address2">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="city">City</label>
+                                            <input id="city" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.city" maxlength="50" name="city">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="state">State</label>
+                                            <input id="state" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.state" maxlength="50" name="state">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="other-State">Other State</label>
+                                            <input id="other-State" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.otherState" maxlength="50"
+                                                name="otherState">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="zip-Code">Zip Code</label>
+                                            <input id="zip-Code" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.ZIPCode" maxlength="50" name="ZIPCode">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="country">Country</label>
+                                            <input id="country" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.country" maxlength="50" name="country">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="home-Phone">Home Phone</label>
+                                            <input id="home-Phone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.homePhone" maxlength="20"
+                                                name="homePhone">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="mobile-Phone">Mobile Phone</label>
+                                            <input id="mobile-Phone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.mobilePhone" maxlength="20"
+                                                name="mobilePhone">
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="work-Phone">Work Phone</label>
+                                            <input id="work-Phone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.workPhone" maxlength="20"
+                                                name="workPhone">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="fax">Fax</label>
+                                            <input id="fax" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.faxPhone" maxlength="20" name="faxPhone">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="email">Email Address*</label>
+                                            <input id="email" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userBean.emailAddress" maxlength="100"
+                                                name="email">
+                                        </div>
+                                    </div>
+                                    <!-- </div> -->
+                                </p-accordionTab>
+                            </p-accordion>
+                        </div>
+                        <div class="ui-g-12 ui-md-12">
+                            <p-accordion [multiple]="true">
+
+                                <p-accordionTab header="Other Information" [selected]="true">
+                                    <div class="ui-g-12 ui-md-4">
+                                        <div class="ui-md-4">
+                                            <button type="button" pButton label="Account-Site-Role" icon="fa fa-plus" (click)="showDialogToAdd()"></button>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-3">
+                                            <p-dialog header="Account-Role-Site" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="1300">
+                                                <div class="ui-g">
+                                                    <div class="ui-g-12 ui-md-12">
+                                                        <div class="ui-g-12 ui-md-7">
+                                                            <div class="ui-g-12 ui-md-4">
+                                                                <p-listbox [options]="accounList" [(ngModel)]="accounts" name="acountsList" #acountsList="ngModel" optionLabel="accountName"
+                                                                    [style]="{'width':'100%'}" [listStyle]="{'max-height':'250px','min-height':'160px'}"
+                                                                    (onChange)="onItemClick($event) " (onChange)="callApifoSites($event)">
+                                                                    <p-header>
+                                                                        Accounts
+                                                                    </p-header>
+
+                                                                </p-listbox>
+                                                            </div>
+                                                            <div class="ui-g-12 ui-md-4">
+                                                                <p-listbox [options]="siteList" [(ngModel)]="sites" name="sitesList" #sitesList="ngModel" optionLabel="siteName" [style]="{'width':'100%'}"
+                                                                    [listStyle]="{'max-height':'250px','min-height':'160px'}"
+                                                                    (onChange)="onItemClick($event)">
+                                                                    <p-header>
+                                                                        Sites
+                                                                    </p-header>
+                                                                </p-listbox>
+                                                            </div>
+                                                            <div class="ui-g-12 ui-md-4">
+                                                                <p-listbox [options]="roleList" [(ngModel)]="roles" name="rolesList" #rolesList="ngModel" optionLabel="roleName" [style]="{'width':'100%'}"
+                                                                    [listStyle]="{'max-height':'250px','min-height':'160px'}"
+                                                                    (onChange)="onItemClick($event)">
+                                                                    <p-header>
+                                                                        Roles
+                                                                    </p-header>
+
+                                                                </p-listbox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-2">
+                                                            <div class="ui-g-12 ui-md-12 center-align">
+                                                                <button type="button" pButton style="margin-top:50px" icon="fa fa-angle-double-right" (click)="onaddUserClick()"></button>
+                                                            </div>
+                                                            <div class="ui-g-12 ui-md-12 center-align">
+                                                                <button type="button" pButton icon="fa fa-angle-double-left" (click)="onRemoveUserClick()"></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-3">
+                                                            <div class="ui-g-12 ui-md-12 center-align">
+                                                                <p-listbox [options]="finalList" name="mainList" optionLabel="code" [style]="{'width':'100%'}" [listStyle]="{'max-height':'250px','min-height':'160px'}"
+                                                                    (onChange)="onMainItemClick($event)">
+                                                                    <p-header>
+                                                                        Final Rights
+                                                                    </p-header>
+                                                                </p-listbox>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-6">
+                                                            <button type="button" pButton label="Cancel" icon="fa fa-times" (click)="closeDialog()"></button>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-6">
+                                                            <button type="button" pButton label="Ok" icon="fa fa-check" (click)="addUserRights()"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </p-dialog>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <!-- 
+                                            <p-checkbox binary="true" (change)="stateChanged()"></p-checkbox>
+
+                                            {{checked}} -->
+                                            <label for="password-generation">Password Generation</label>
+                                            <p-dropdown id="password-generation" [options]="resetpassword " [(ngModel)]="userBean.manuale" name="resetpasswords" [autoWidth]="false"
+                                                (onChange)="passwordGenerationType($event)" #resetpasswords="ngModel" placeholder="Select an option"></p-dropdown>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="password">New Password*</label>
+                                            <input id="password" type="password" size="20" [(ngModel)]="userBean.password" name="password" #password="ngModel" [disabled]="userBean.manuale=='Auto'"
+                                                pInputText autocomplete="off" maxlength="100">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="confirm-password">Confirm Password*</label>
+                                            <input id="confirm-password" type="password" size="20" [disabled]="userBean.manuale=='Auto'" [(ngModel)]="userBean.confirmPassword"
+                                                name="confirmPassword" #confirmPassword="ngModel" pInputText autocomplete="off"
+                                                maxlength="100">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <div class="ui-g" style="width:250px;margin-top:15px">
+                                                <div class="ui-g-12">
+                                                    <p-checkbox name="group2" label="Email Credential" binary="userBean.emailCredentials" [(ngModel)]="userBean.emailCredentials" [disabled]="userBean.emailCredentialsFlag" ></p-checkbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="account-name">Account Name*</label>
+                                            <p-dropdown [options]="defaultAccount" [(ngModel)]="userBean.accountID" optionLabel="accountName" name="account-name" [autoWidth]="false"
+                                                #Accountname="ngModel" placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="site-name">Site Name*</label>
+                                            <p-dropdown [options]="defaultSite" [(ngModel)]="userBean.defaultSiteID" name="site-name" [autoWidth]="false" #Sitename="ngModel"
+                                                placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="role-name">Role Name*</label>
+                                            <p-dropdown [options]="defaultRole" [(ngModel)]="userBean.defaultRoleID" name="role-name" [autoWidth]="false" #Rolename="ngModel"
+                                                placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="theme">Theme*</label>
+                                            <p-dropdown [options]=" " [(ngModel)]="userBean.defaultTheme" name="defaultTheme" [autoWidth]="false" #defaultTheme="ngModel"
+                                                placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                    </div>
+
+                                </p-accordionTab>
+                            </p-accordion>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+    <div class="sendingEmail-all"></div>
+</div>
+<div class="msg">
+    <p-growl [(value)]="msgs"></p-growl>
+</div>

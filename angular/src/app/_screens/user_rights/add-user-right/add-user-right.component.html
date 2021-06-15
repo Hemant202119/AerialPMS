@@ -1,0 +1,82 @@
+<div class="ui-fluid">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="card no-margin">
+
+                <form novalidate #f="ngForm" (ngSubmit)="saveUserRights()">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 ui-md-6">
+                            <h1>Add/Edit User Rights</h1>
+                        </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <div class="ui-g-12 ui-md-4"></div>
+                            <div class="ui-g-12 ui-md-4">
+                                <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/user-rights"> </button>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                <button type="submit" pButton label="Save" icon="fa fa-check" [disabled]="!userDropdownFlag"></button>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <div class="ui-g-12 ui-md-4">
+                                <label for="user-name">User Name</label>
+                            </div>
+                            <div class="ui-g-12 ui-md-8">
+                                <p-dropdown id="user-name" [options]="userList" optionLabel="loginName" [autoWidth]="false" (onChange)="searchUserName($event)"
+                                    [disabled]="userDropdownFlag" placeholder="Select an Option"> </p-dropdown>
+
+                            </div>
+                        </div>
+                        <div class="card card-w-title">
+                            <p-table #dt [value]="userRightsList" [columns]="cols" [(selection)]="selectedUserRight" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                                [responsive]="true">
+                                <ng-template pTemplate="header" let-columns>
+
+                                    <tr>
+                                        <th style="width: 3.25em">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+
+                                            {{col.header}}
+                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr [pSelectableRow]="rowData">
+
+                                        <td>
+                                            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                        </td>
+                                        <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                            <span>
+                                                {{rowData[col.field]}}
+                                            </span>
+
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="columns.length">
+                                            No records found
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+    <div class="sendingEmail-all"></div>
+  </div>
+<div class="msg">
+    <p-growl [(value)]="msgs"></p-growl>
+</div>

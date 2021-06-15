@@ -1,0 +1,20 @@
+
+.table-parameter-code{
+  word-wrap: break-word !important;
+  word-break: break-all !important;
+  word-break: break-all;
+}  
+.table-parameter-type{
+  width: 10.25em !important;
+  text-align: center !important;
+}
+.table-data-type{
+  width: 8.25em !important;
+  text-align: center !important;
+}
+.table-status-type{
+  width: 8.25em !important;
+  text-align: center !important;
+}
+
+

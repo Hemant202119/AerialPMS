@@ -1,0 +1,343 @@
+<div class="ui-fluid">
+  <div class="ui-g">
+      <div class="ui-g-12">
+          <div class="card no-margin">
+              <p-tabView (onChange)="onTabChange($event)">
+                  <p-tabPanel header="{{breadLabel}}" leftIcon="fa fa-address-card-o">
+                      <form novalidate #f="ngForm"(ngSubmit)="addCategory()">
+                          <div class="ui-g form-group">
+                              <div class="ui-g-12 ui-md-6">
+                                   </div>
+                              <div class="ui-g-12 ui-md-6">
+                                <div class="ui-g-12 ui-md-4"></div>
+                                  <div class="ui-g-12 ui-md-4">
+                                      <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/manage-assets"></button>
+                                </div>
+                                  <div class="ui-g-12 ui-md-4">
+                                      <button type="submit" pButton label="Save" icon="fa fa-check"  [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                  </div>
+                              </div>
+                           <div class="ui-g-12">
+                                  <p-accordion [multiple]="true">
+                                      <div class="ui-md-12">
+                                          <p-accordionTab header="Category Information" [selected]="true">
+                                              <div class="ui-g-12">
+                                                   <div class="ui-g-12 ui-md-4">
+                                                      <label for="category-name">Category Name*</label>
+                                                      <input id="category-name" type="text" size="50" pInputText autocomplete="off" [(ngModel)]="assetCategoryBean.categoryName" maxlength="50" name="categoryName">
+                                              </div>
+                                                  <div class="ui-g-12 ui-md-4">
+                                                      <label for="category-code">Category Code*</label>
+                                                      <input id="category-code" type="text" size="20" pInputText autocomplete="off" [(ngModel)]="assetCategoryBean.categoryCode" #categoryCode="ngModel"
+                                                      name="categoryCode" maxlength="20">
+                                              </div> 
+                                                  <div class="ui-g-12 ui-md-4">
+                                                      <label for="category-status">Category Status*</label>
+                                                      <p-dropdown id="category-status" [options]="categoryStatusNames" [autoWidth]="false" [(ngModel)]="assetCategoryBean.categoryStatus" name="categoryStatus"
+                                                      #categoryStatus="ngModel" ></p-dropdown>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                  <label for="category-desc">Category Description</label>
+                                                  <input id="category-desc" type="text" size="20" pInputText autocomplete="off" [(ngModel)]="assetCategoryBean.categoryDescription" #categoryDesc="ngModel"
+                                                  name="categoryDesc" maxlength="20">
+                                          </div> 
+                                              </div>
+                                          </p-accordionTab>
+                                      </div>
+                                  </p-accordion>
+                              </div>
+                          </div>
+                      </form>
+                  </p-tabPanel>
+
+<!-- new tab -->
+           
+                  <p-tabPanel header=" Sub Categories" leftIcon="fa fa-stack-exchange" [disabled]="enableFlag">
+                         
+                      <div class="ui-fluid">
+                          <div class="ui-g">
+                              <div class="ui-g-12">
+                                  <div class="card no-margin">
+                                        
+                                    <div class="ui-g cust-heading">
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div class="ui-g-12 ui-md-4"><h1>Sub Categories</h1></div>
+                                            <div class="ui-g-12 ui-md-4" style="text-align:center;"><h1>Category Name : {{assetCategoryBean.categoryName}}</h1></div> 
+                                            <div class="ui-g-12 ui-md-4"> </div>   
+                                        </div> 
+                                    </div>               
+                                            <!-- <h1> </h1>  -->
+                                     
+                                      <div class="ui-g form-group">
+                                          <div class="ui-g-12 ui-md-6">
+                                              <div class="ui-g-12 ui-md-4">
+                                                  <button type="button" pButton label="Delete" (click)="deleteSubCatgeory()"  icon="fa fa-trash"  [disabled]="!roleRightsGuard.roleRights.deleteAccess" ></button>
+                                           </div>
+                                              <div class="ui-g-12 ui-md-8">
+                                                  <p-dropdown id="dropdown" [options]="categoryStatusNames" (onChange)="searchAssetsSubCategory($event)" [autoWidth]="false"></p-dropdown>
+                                              </div>
+                                       </div>
+                                          <div class="ui-g-12 ui-md-6">
+                                              <div class="ui-g-12 ui-md-8">
+                                                  <div class="ui-inputgroup">
+                                                      <button type="button" icon="fa fa-search" pButton></button>
+                                                      <input type="text" placeholder="Search" (input)="dt1.filterGlobal($event.target.value, 'contains')" pInputText>
+                                                  </div>
+                                              </div>
+                                           <div class="ui-g-12 ui-md-4">
+                                                  <button type="button" pButton label="Add Sub Category" icon="fa fa-plus" (click)="addAssetSubCategoryDialog()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                              </div>
+
+                                              
+
+
+                                              <p-dialog header="{{subCategoryHeaderDialog}}" [(visible)]="addAssetSubCategoryFlag" [responsive]="true" showEffect="fade" [modal]="true" [width]="1300">
+                                               
+                                               
+                                                <div class="ui-g-12">
+                                                  <div class="ui-g-12 ui-md-6">
+                                                       </div>
+                                                   <div class="ui-g-12 ui-md-3">
+                                                          <button type="button" pButton label="Cancel" icon="fa fa-times" (click)="closeAssetSubCategoryDialog()"></button>
+                                                    </div>
+                                                      <div class="ui-g-12 ui-md-3">
+                                                          <button type="button" pButton label="Save" icon="fa fa-check"  (click)="addSubCategory()" [disabled]="editSubFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                                      </div>
+                                                  </div>
+                                                  <div class="ui-g-12 ui-md-12">
+                                                      <!-- <div class="ui-g-12 ui-md-3">
+                                                          <label for="category-name">Category Name*</label>
+                                                          <p-dropdown id="category-name" [options]="assetCategoryTOList" [autoWidth]="false" [(ngModel)]="assetSubCategoryBean.assetCategoryID" name="assetCategoryID"
+                                                      #assetCategoryID="ngModel" optionLabel="categoryName" placeholder="Select an option"></p-dropdown>
+                                                      </div> -->
+                                                      <div class="ui-g-12 ui-md-3">
+                                                          <label for="sub-category-name">Sub Category Name*</label>
+                                                          <input id="sub-category-name" type="text" size="50" pInputText autocomplete="off" [(ngModel)]="assetSubCategoryBean.subCategoryName" #subCategoryName="ngModel"
+                                                          name="subCategoryName" maxlength="50">
+                                                      </div>
+                                                      <div class="ui-g-12 ui-md-3">
+                                                          <label for="sub-category-code">Sub Category Code*</label>
+                                                          <input id="sub-category-code" type="text" size="20" pInputText autocomplete="off"  [(ngModel)]="assetSubCategoryBean.subCategoryCode" #subCategoryCode="ngModel"
+                                                          name="subCategoryCode" maxlength="20">
+                                                      </div>
+
+                                                      <div class="ui-g-12 ui-md-3">
+                                                          <label for="sub-category-status">Sub Category Status*</label>
+                                                          <p-dropdown id="sub-category-status" [options]="categoryStatusNames" [autoWidth]="false" [(ngModel)]="assetSubCategoryBean.subCategoryStatus" name="subCategoryStatus"
+                                                      #subCategoryStatus="ngModel" ></p-dropdown>
+                                                      </div>
+                                                      <div class="ui-g-12 ui-md-12">
+                                                        <label for="sub-category-desc">Sub Category Description</label>
+                                                        <input id="sub-category-desc" type="text" size="20" pInputText autocomplete="off"  [(ngModel)]="assetSubCategoryBean.subCategoryDescription" #subCategoryDesc="ngModel"
+                                                        name="subCategoryDesc" maxlength="20">
+                                                    </div>
+                                                  </div>
+                                                
+                                                
+                                              </p-dialog>  
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="card card-w-title">
+                                    <p-table #dt1 [value]="assetSubCategoryTOList" [columns]="cols" [(selection)]="selectedSubCategory" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                                        [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th style="width: 3.25em"></th>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngClass]="col.class">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+                                                <td>
+                                                    <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+                                                </td>
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Sub Category" (click)="editSubCategory(rowData[col.id])" [disabled]="!roleRightsGuard.roleRights.viewAccess" icon="fa fa-edit" 
+                                                            pButton></button>&nbsp;&nbsp;{{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx != 0">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                    <td [attr.colspan]="columns.length">
+                                                            No records found
+                                                        </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                     
+                      
+                  </p-tabPanel>
+<!-- new tab -->
+
+                  <p-tabPanel header="Items" leftIcon="fa fa-database" [disabled]="enableFlag">
+                    <!-- <form novalidate #f="ngForm"(ngSubmit)="addItem()"> -->
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card no-margin">
+                                
+                                <div class="ui-g cust-heading">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4"><h1>Items</h1></div>
+                                        <div class="ui-g-12 ui-md-4" style="text-align:center;"><h1>Category Name : {{assetCategoryBean.categoryName}}</h1></div> 
+                                        <div class="ui-g-12 ui-md-4"> </div>   
+                                    </div> 
+                                </div>  
+                                <div class="ui-g form-group">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <button type="button" pButton label="Delete" (click)="deleteSubCatgeoryItem()"  [disabled]="!roleRightsGuard.roleRights.deleteAccess" icon="fa fa-trash"></button>
+                                     </div>
+                                     <div class="ui-g-12 ui-md-8">
+                                        <!-- <label for="sub-category-name">Sub Category Name*</label> -->
+                                        <p-dropdown id="category-name" [options]="assetSubCategoryTOList" [autoWidth]="false" [(ngModel)]="subCategoryItemBean.assetSubCategoryID" name="assetSubCategoryID"
+                                          #assetSubCategoryID="ngModel" optionLabel="subCategoryName" placeholder="Sub Category" (onChange)="fetchItems()" ></p-dropdown>
+                                          
+                                    </div>
+                                 </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <div class="ui-g-12 ui-md-8">
+                                            <div class="ui-inputgroup">
+                                                <button type="button" icon="fa fa-search" pButton></button>
+                                                <input type="text" placeholder="Search" (input)="dt2.filterGlobal($event.target.value, 'contains')" pInputText>
+                                            </div>
+                                        </div>
+                                     <div class="ui-g-12 ui-md-4">
+                                            <button type="button" pButton label="Add Item" icon="fa fa-plus" (click)="addSubCategoryItem()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                        </div>
+                                          <p-dialog header="{{addSubCatItemHeaderDialog}}" [(visible)]="addItemsDialogFlag" [responsive]="true" showEffect="fade" [modal]="true" [width]="1300">
+                                            
+                                            <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                 </div>
+                                             <div class="ui-g-12 ui-md-3">
+                                                    <button type="button" pButton label="Cancel" icon="fa fa-times" (click)="closeSubCategoryItem()"></button>
+                                              </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <button type="button" pButton label="Save" icon="fa fa-check"(click)="addItem()" [disabled]="editSubItemFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <!-- <div class="ui-g-12 ui-md-4">
+                                                    <label for="category-name">Category Name*</label>
+                                                    <p-dropdown id="category-name" [options]="assetCategoryTOList" [autoWidth]="false" [(ngModel)]="assetSubCategoryBean.assetCategoryID" name="assetCategoryID"
+                                                      #assetCategoryID="ngModel" optionLabel="categoryName" placeholder="Select an option"></p-dropdown>
+                                                      
+                                                </div> -->
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="sub-category-name-item">Sub Category Name*</label>
+                                                    <p-dropdown id="sub-category-name-item" [options]="assetSubCategoryTOList" [autoWidth]="false" [(ngModel)]="subCategoryItemBean.assetSubCategoryID" name="assetSubCategoryID"
+                                                      #assetSubCategoryID="ngModel" optionLabel="subCategoryName" placeholder="Select an option" (onChange)="fetchItems()" ></p-dropdown>
+                                                      
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                  <label for="item-name">Item Name*</label>
+                                                  <input id="item-name" type="text" size="50" pInputText autocomplete="off" [(ngModel)]="subCategoryItemBean.itemName" #itemName="ngModel"
+                                                  name="itemName" maxlength="50">
+                                              </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="item-code">Item Code*</label>
+                                                    <input id="item-code" type="text" size="20" pInputText autocomplete="off"  [(ngModel)]="subCategoryItemBean.itemCode" #itemCode="ngModel"
+                                                    name="itemCode" maxlength="20">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                  <label for="item-type">Item Type*</label>
+                                                  <p-dropdown id="item-type" [options]="itemTypeStatus" [autoWidth]="false" [(ngModel)]="subCategoryItemBean.itemType" name="itemType"
+                                              #itemType="ngModel" placeholder="Select an option"></p-dropdown>
+                                              </div>
+
+                                              <div class="ui-g-12 ui-md-4">
+                                                <label for="item-unit">Item Unit*</label>
+                                                <input id="item-unit" type="text" size="20" pInputText autocomplete="off"  [(ngModel)]="subCategoryItemBean.itemUnit" #itemUnit="ngModel"
+                                                name="itemUnit" maxlength="20">
+                                            </div>
+
+                                              <div class="ui-g-12 ui-md-4">
+                                                <label for="item-status">Item Status*</label>
+                                                <p-dropdown id="item-status" [options]="categoryStatusNames" [autoWidth]="false" [(ngModel)]="subCategoryItemBean.itemStatus" name="itemStatus"
+                                            #itemStatus="ngModel" ></p-dropdown>
+                                            </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                  <label for="item-desc">Item Description</label>
+                                                  <input id="item-desc" type="text" size="20" pInputText autocomplete="off"  [(ngModel)]="subCategoryItemBean.itemDescription" #itemDesc="ngModel"
+                                                  name="itemDesc" maxlength="20">
+                                              </div>
+                                            </div>
+                                          
+                                            <!-- <form novalidate #f="ngForm"(ngSubmit)="addItem()"> -->
+                                        </p-dialog>  
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-w-title">
+                                <p-table #dt2 [value]="assetSubCategoryItemTOList" [columns]="cols2" [(selection)]="selectedSubCategoryItem" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                                    [responsive]="true">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th style="width: 3.25em"></th>
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngClass]="col.class">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData">
+                                            <td>
+                                                <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+                                            </td>
+                                            <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                <span *ngIf="idx == 0">
+                                                    <button type="button" title="Edit Item" (click)="editSubCategoryItem(rowData[col.id])" [disabled]="!roleRightsGuard.roleRights.viewAccess" icon="fa fa-edit" 
+                                                        pButton></button>&nbsp;&nbsp;{{rowData[col.field]}}
+                                                </span>
+                                                <span *ngIf="idx != 0">
+                                                    {{rowData[col.field]}}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                        No records found
+                                                    </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                
+                <!-- </form> -->
+            </p-tabPanel>
+              </p-tabView>
+          </div>
+      </div>
+  </div>
+  </div>
+  <div class="custom-overlay-all" *ngIf="showPageSpinner">
+    <div class="sendingEmail-all"></div>
+  </div>   
+<div class="msg">
+  <p-growl [(value)]="msgs"></p-growl>
+  </div>
+  
+  <p-confirmDialog header="Confirmation" icon="fa fa-info" width="425"></p-confirmDialog>

@@ -1,0 +1,45 @@
+<div class="ui-fluid">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="card no-margin">
+
+        <form novalidate #f="ngForm" (ngSubmit)="addCircle()">
+          <div class="ui-g form-group">
+            <div class="ui-g-12 ui-md-6">
+              <h1 *ngIf="!editFlag">Add Circle</h1>
+              <h1 *ngIf="editFlag">Edit Circle</h1>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+              <div class="ui-g-12 ui-md-4"></div>
+              <div class="ui-g-12 ui-md-4">
+                <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/circles"> </button>
+              </div>
+              <div class="ui-g-12 ui-md-4">
+                <button type="submit" pButton label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+              <div class="ui-g-12 ui-md-3"></div>
+              <div class="ui-g-12 ui-md-3">
+                <label for="circle-name">Circle Name*</label>
+                <input id="circle-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="circle.circleName" #circleName="ngModel"
+                  name="circleName" maxlength="50" ng-required="true" maxlength="20">
+              </div>
+              <div class="ui-g-12 ui-md-3">
+                <label for="circle-status">Circle Status*</label>
+                <p-dropdown [options]="status" [(ngModel)]="circle.circleStatus" name="circleStatus" [autoWidth]="false" #circleStatus="ngModel"
+                  placeholder="Select an option"></p-dropdown>
+              </div>
+            </div>
+          </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+  <div class="sendingEmail-all"></div>
+</div>
+<div class="msg">
+  <p-growl [(value)]="msgs"></p-growl>
+</div>

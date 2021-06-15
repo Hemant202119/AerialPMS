@@ -1,0 +1,478 @@
+/* You can add global styles to this file, and also import other style files */
+body .ui-state-disabled, body .ui-widget:disabled {
+    opacity: 0.5;
+    filter: Alpha(Opacity=35);
+    background-image: none;
+    cursor: not-allowed !important;
+    background-color: #ccc;
+}
+body input:read-only {
+    cursor: not-allowed !important;
+}
+.ui-inputwrapper-filled[ng-reflect-readonly="true"] .ui-dropdown-label{
+    cursor: not-allowed !important;
+}
+body .ui-panel .ui-panel-content {
+    float: none;
+    width: 100%;
+    display: inline-block;
+}
+body .ui-accordion-content.ui-widget-content{
+    float: none;
+    width: 100%;
+    display: inline-block;
+}
+label{
+    font-weight: bold;
+}
+.heading-center{
+    text-align: center;
+}
+.body .ui-dialog .ui-dialog-content {
+    padding: 1em;
+    overflow: visible;
+}
+.center-align{
+    text-align: center;
+}
+.login-body .left-side img {
+    padding: 81px 0 34px 0;
+    width: auto;
+}
+.copyRight{
+    color: #565656;
+    opacity: 1 !important;
+    width: 100%;
+    text-align: center;
+    bottom: 0px !important;
+    // position: absolute;
+    // margin-bottom: 30px !important;
+    font-weight: bold;
+}
+.exception-body .exception-container {
+    height: 70vh;
+    padding-left: 100px;
+}
+.exception-body.access-body{
+    border-top: none;
+}
+
+
+/****** For Temprary Image in Dashboard  ******/
+.dashboard{
+    text-align: center;
+    width: 410px;
+    margin: 0px auto !important;
+}
+.dashboard img{
+    // width:400px;
+    // height:300px;
+
+    width: 70%;
+    margin: 0 auto;
+    height: 600px;
+
+   }
+
+.ui-g.dashboard {
+    width: 100%;
+}
+
+
+/****** Min-Height Set For all Pages *****/
+.layout-content-container{
+    min-height:730px;
+    
+}
+
+/***** Footer CSS *****/
+
+    .footer-Logo{
+        width: 200px; text-align: left; float: left;
+    }
+    .footer-Logo img{
+        width:100px !important; margin-left:15px !important;
+    }
+    .topbar.atBottom{
+        position: relative !important; height: 40px; padding:0px 30px !important;
+    }
+    .layout-footer.upper-footer.topbar{
+        position: relative !important; padding: 15px 40px;
+    }
+    .upper-footer ul{ 
+        list-style-type: none; margin-top: 0px !important;
+    }
+    .upper-footer ul li{  
+        float:left; width:100px; text-align:right;
+    }
+    .topbar.atBottom .layout-footer.topbar{
+        position: relative !important;
+    }
+    .footer-text-left.profile{
+        float:left;
+    }
+    .footer-text-left.profile.username{
+        float:none !important;
+    }
+    .footer-text-left.username{
+        float:left;
+    }
+    .footer-text-center.username{
+        text-align: center; width: 100% !important; display: block; margin-top: 5px;
+    }
+    .topbar.atBottom .footer-text-right {
+        float: right; margin-top: 5px;
+    }
+    .topbar.atBottom .profile{
+        width: 100%;
+    }
+    body .layout-wrapper .topbar.atBottom .profile{
+        margin-top: 5px !important; 
+    }
+    .layout-footer div{
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+    .layout-footer.upper-footer.topbar .ui-g-12.ui-sm-4.ui-md-4{
+        padding-top:0px !important;padding-bottom:0px !important;
+    }
+    @media (max-width: 1024px){
+        .footer-text-left.username{
+            display:block !important;
+        }
+        .footer-text-center.username{
+            display:block !important;
+            margin-top: -3px;
+        }
+        .atBottom.topbar{
+            padding-left:10px !important;
+            padding-right:10px !important;
+        }
+        .upper-footer ul li {
+            width: 75px;
+        }
+        .topbar.atBottom .footer-text-right {
+            display:block !important;
+            float: right;
+            margin-top: -3px;
+            line-height: 14px;
+        }
+        body .layout-wrapper .layout-content {
+            padding: 5px 0px;
+        }
+        body .layout-wrapper .topbar.atBottom{
+            height: 60px;
+        }
+    }
+
+
+    /***** Login Screen Changes *****/
+    .login-body{
+        background: none;
+    }
+    .logo-right-container{
+        margin-bottom:30px;
+        color:#212121;
+    }
+    .login-wrapper .login-container .title {
+        font-size: 30px;
+        color:#212121;        
+    }
+    .ediosLogo{
+        width: 130px;
+        margin: 0px auto !important;
+        margin-top: 5vh !important;
+    }
+    .ediosLogo img{
+        width:100%;   
+    }
+
+    .login-body::after {
+        content: "";
+        background: url(assets/layout/images/Aerial/bg_img.jpg);
+        opacity: 1;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+        background-size: 50% 100% !important;
+        background-repeat: no-repeat;
+    }
+/***** right Area  *****/
+.login-wrapper .login-container {
+    box-sizing: border-box;
+    padding-top: 10vh;
+    text-align: center;
+    color: #4f575b;
+}
+.logo-right-container h2 {
+    font-size: 30px;
+    margin-top: 2vh;
+    /*margin-bottom: 5vh;*/
+}
+    @media (max-width: 1024px){
+        .left-side{
+            display:none;
+        }
+        .login-body::after{
+            background: none !important;
+        }
+    }
+    @media ( min-width :1686px) and (max-width:3000px) {  
+        .ediosLogo {
+            width: 130px;
+            margin: 0px auto !important;
+            margin-top: 28vh !important;
+        }
+	}
+	
+	@media ( min-width :1500px) and (max-width:1685px) {
+		.ediosLogo {
+            width: 130px;
+            margin: 0px auto !important;
+            margin-top: 19vh !important;
+        }
+	}
+	
+	@media ( min-width :1400px) and (max-width:1500px) {
+		.ediosLogo {
+            width: 130px;
+            margin: 0px auto !important;
+            margin-top: 19vh !important;
+        }
+	}
+	@media (min-width :1290px) and (max-width:1399px) {
+		.ediosLogo {
+            width: 130px;
+            margin: 0px auto !important;
+            margin-top: 7vh !important;
+        }
+	}
+	@media ( min-width :1025px) and (max-width:1289px) {
+		.ediosLogo {
+            width: 130px;
+            margin: 0px auto !important;
+            margin-top: 12vh !important;
+        }
+	}
+	@media ( min-width :320px) and (max-width:1024px) {
+		.ediosLogo {
+            width: 130px;
+            margin: 0px auto !important;
+            margin-top: 15vh !important;
+        }
+    }
+    @media ( min-width :767px) and (max-width:1280px) {
+        @media screen and (orientation:portrait) {
+            .ediosLogo {
+                width: 130px;
+                margin: 0px auto !important;
+                margin-top: 19vh !important;
+            }        
+        }
+        @media screen and (orientation:landscape) {	
+            
+        }		
+    }
+    @media ( min-width :601px) and (max-width:766px) {	
+        @media screen and (orientation:portrait) {
+            .ediosLogo {
+                width: 130px;
+                margin: 0px auto !important;
+                margin-top: 25vh !important;
+            }    
+        }
+        @media screen and (orientation:landscape) {	
+            
+        }
+    }
+    @media ( min-width :481px) and (max-width:600px) {	
+        @media screen and (orientation:portrait) {
+            .ediosLogo {
+                width: 130px;
+                margin: 0px auto !important;
+                margin-top: 25vh !important;
+            }    
+        }
+        @media screen and (orientation:landscape) {	
+            
+        }
+    }
+    @media ( min-width :320px) and (max-width:480px) {	
+        @media screen and (orientation:portrait) {
+            .ediosLogo {
+                width: 130px;
+                margin: 0px auto !important;
+                margin-top: 25vh !important;
+            }    
+        }
+        @media screen and (orientation:landscape) {	
+            
+        }
+    }
+
+/**********************************/
+/***** Login Screen Color Fix *****/
+/**********************************/
+
+.login-body .body-container {
+    height: 7px;
+    border-top: 7px solid #39a3f4;
+}
+.login-body  .login-wrapper .login-container a {
+    color: #39a3f4;
+}
+.login-body .login-wrapper .login-container .ui-button {
+    width: 100%;
+    font-size: 16px;
+    color: #ffffff;
+}
+.login-body .login-wrapper .login-container a:hover {
+    border-bottom-color: #39a3f4;
+}
+body .login-body  .ui-inputtext:enabled:focus:not(.ui-state-error) {
+    border-color: #39a3f4;
+    box-shadow: 0 0 7px 0 #39a3f4;
+    -webkit-box-shadow: 0 0 7px 0 #39a3f4;
+    -moz-box-shadow: 0 0 7px 0 #39a3f4;
+}
+body .login-body .ui-inputtext:enabled:hover:not(.ui-state-error) {
+    border-color: #39a3f4;
+}
+.layout-wrapper .ui-fluid h2{
+    font-weight:bold !important;
+    font-size:20px !important;
+    text-align: center !important;
+}
+
+td.ui-editable-column button{
+    //background-color:#49696c !important ;
+    float:right ;
+    height: 20px !important;
+    width: 20px !important;
+    margin-top: 1px !important;
+    margin-right: -8px !important;
+}
+.ui-inputtext:read-only + button{
+    pointer-events: none !important;
+}
+
+/*** Calendar in Dialog ***/
+body .ui-dialog .ui-dialog-content{
+    overflow: visible;
+}
+
+.ui-datatable .ui-editable-column>.ui-cell-editor {
+    display: block;
+    margin: 0px auto !important;
+    width: 30px;
+}
+.ui-datatable .ui-editable-column:nth-child(2) .ui-cell-editor {
+    display: block;
+    width: 100%;
+}
+.ui-dialog .ui-dialog-titlebar-close span {
+    display: none; 
+}
+
+/**** Growlwidget ****/
+.ui-growl.ui-widget{
+    z-index: 9999 !important;
+}
+.ui-table{
+    min-height: 300px;
+}
+.ui-dialog-content .ui-table{
+    min-height: auto !important;
+}
+.ui-dialog-content.ui-widget-content{
+    height:auto !important;
+}
+// .ui-table-scrollable-header.ui-widget-header{
+//     margin-right: 17px !important; margin-left: 0px;
+// }
+
+/* Progress Bar */
+.progress-bar{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    z-index: 999999;
+}
+.dialog-Control.height-control .ui-dialog{
+    top:15px !important;
+}
+/*
+.loader > div:before{
+    z-index:9999;
+    opacity: 0.7;
+}
+.loader > div span{
+    z-index:999999 !important;    
+}
+
+body .ui-dialog .ui-dialog-content .ui-dialog-content.ui-widget-content {
+    height: 450px !important;
+    overflow-y: scroll;
+}*/
+
+.custom-overlay-all{
+    width:100vw;
+    height:100vh;
+    top:0px;
+    left:0px;
+    position: absolute;
+    pointer-events: none;
+    z-index:99999999;
+    bottom: 0px;
+}
+.custom-overlay-all:before{
+    content:'';
+    width:100%;
+    height:100vh;
+    position:absolute;
+    top:0;
+    left:0;
+    bottom: 0px;
+    opacity:0.8;
+    pointer-events: auto;
+    background-color: #ccc;
+}
+.sendingEmail-all{
+    background-image: url('assets/layout/images/sending-mail-all.gif');
+    width:244px;
+    height:127px;
+    z-index:9999999999;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+.card.card-w-title.main_tab {
+    width: 100%;
+    overflow-x: scroll;
+}
+
+p-table.tabsize .ui-table.ui-widget.ui-table-responsive {
+    width: 3500px!important;
+    // overflow-x: scroll;
+}
+
+
+@media screen and (max-width: 767px){
+
+    .dashboard img {
+        width: 80%;
+        margin: 0 auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+
+}

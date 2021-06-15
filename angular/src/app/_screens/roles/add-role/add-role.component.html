@@ -1,0 +1,132 @@
+<div class="ui-fluid">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card no-margin">
+    
+                    <!-- <p-tabView >          
+                                <p-tabPanel header="Site" leftIcon="fa-check" > -->
+                    <form novalidate #f="ngForm" (ngSubmit)="addRole()">
+                        <div class="ui-g form-group">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-6">
+                                    <h1 *ngIf="!editFlag">Add Role</h1>
+                                    <h1 *ngIf="editFlag">Edit Role</h1>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <div class="ui-g-12 ui-md-4"></div>
+                                    <div class="ui-g-12 ui-md-4">
+                                        <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/roles"></button>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4">
+                                        <button type="submit" pButton label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <p-accordion [multiple]="true">
+                                    <div class="ui-g-12">
+                                        <!-- <p-panel header="Role Information" [toggleable]="true">     -->
+                                        <p-accordionTab header="Role Information" [selected]="true">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="role-name">Role Name*</label>
+                                                    <input id="role-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="roleBean.roleName" #roleName="ngModel"
+                                                        name="roleName" maxlength="100" ng-required="true">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="role-desc">Role Description*</label>
+                                                    <input id="role-desc" type="text" size="30" pInputText ng-required="true" autocomplete="off" [(ngModel)]="roleBean.roleDesc"
+                                                        #roleDesc="ngModel" name="roleDesc" maxlength="50">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="role-status">Role Status*</label>
+                                                    <p-dropdown id="role-status" [options]="roleStatusList" [autoWidth]="false" [(ngModel)]="roleBean.roleStatus" name="roleStatus"
+                                                        #roleStatus="ngModel" placeholder="Select an option"></p-dropdown>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3"></div>
+                                            </div>
+                                            <!-- </p-panel> -->
+                                        </p-accordionTab>
+    
+                                    </div>
+                                
+                                </p-accordion>
+                            </div>
+                        </div>
+    
+                    </form>
+                    <div class="ui-g form-group">
+                    <div class="ui-g-12 ui-md-12">
+                    <p-accordion [multiple]="true">
+                        <div class="ui-g-12">
+                            <p-accordionTab header="Role Rights" [selected]="true">
+                    <p-dataTable [value]="roleRightsList"  dataKey="menuID"  [editable]="true" >
+                            <p-header>Role Rights Access</p-header>
+                            <p-column  >
+                                   
+                                    <ng-template pTemplate="output" let-col let-element="rowData">
+                                            <span  *ngIf="element.parentMenuID==null" style="line-height: 30px;"  > {{element.menuDesc}} </span>
+                                    </ng-template>
+                            </p-column>
+                            <p-column  header="Sreen Name" [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                           <p-checkbox binary="true"  [(ngModel)]="element.selectAll" *ngIf="element.parentMenuID!=null"
+                                            (onChange)="onSelectAll(element,element.selectAll)"></p-checkbox>
+                                      <span *ngIf="element.parentMenuID!=null">{{element.menuDesc}}</span>
+                                        </ng-template>
+                            </p-column>
+                            <p-column  header="Add"  [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                        <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="element.insertAccess"
+                                             (click)="accessChangeListener(element,element.insertAccess)"  *ngIf= "element.insertVisible==1" ></p-inputSwitch>
+                                    </ng-template>
+                            </p-column>
+                            <p-column header="Edit"  [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                            <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="element.updateAccess" 
+                                                 (click)="accessChangeListener(element,element.updateAccess)"   *ngIf= "element.updateVisible==1"  ></p-inputSwitch>
+                                        </ng-template>
+                            </p-column>
+                            <p-column header="Delete"  [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                            <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="element.deleteAccess" 
+                                                 (click)="accessChangeListener(element,element.deleteAccess)"   *ngIf= "element.deleteVisible==1"  ></p-inputSwitch>
+                                        </ng-template>
+                            </p-column>
+                            <p-column  header="View"  [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                            <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="element.viewAccess" 
+                                                 (click)="viewAccessChangeListener(element,element.viewAccess)"   *ngIf= "element.viewVisible==1"  ></p-inputSwitch>
+                                        </ng-template>
+                            </p-column>
+                            <p-column  header="Print"  [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                            <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="element.printAccess" 
+                                                 (click)="printExportChangeListener(element,element.printAccess)"   *ngIf= "element.printVisible==1"  ></p-inputSwitch>
+                                        </ng-template>
+                            </p-column>
+                            <p-column header="Export"  [editable]="true">
+                                    <ng-template let-col let-element="rowData" pTemplate="editor">
+                                            <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="element.exportAccess" 
+                                                 (click)="printExportChangeListener(element,element.exportAccess)"   *ngIf= "element.exportVisible==1"  ></p-inputSwitch>
+                                        </ng-template>
+                            </p-column>
+                           
+                        </p-dataTable>
+                        </p-accordionTab>
+                        </div>
+                        </p-accordion>
+                        </div>
+                        </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    <div class="custom-overlay-all" *ngIf="showPageSpinner">
+        <div class="sendingEmail-all"></div>
+      </div>
+    <div class="msg">
+        <p-growl [(value)]="msgs"></p-growl>
+    </div>
+    <p-confirmDialog header="Confirmation" icon="fa fa-info" width="425"></p-confirmDialog>

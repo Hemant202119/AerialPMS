@@ -1,0 +1,170 @@
+<div class="ui-fluid">
+    <div class="ui-g">
+        <div class="ui-g-12">
+              <div class="card no-margin">
+                          
+                        <!-- <p-tabView >          
+                            <p-tabPanel header="Site" leftIcon="fa-check" > -->
+                      <form novalidate #f="ngForm" (ngSubmit)="addSite()">   
+                                        <div class="ui-g form-group">
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <h1 *ngIf="!editFlag">Add Site</h1>
+                                                    <h1 *ngIf="editFlag">Edit Site</h1>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                      <div class="ui-g-12 ui-md-4"></div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                              <button type="button" pButton  label="Cancel" icon="fa fa-times" routerLink="/sites"  ></button>      
+                                                          </div>
+                                                          <div class="ui-g-12 ui-md-4">
+                                                                <button type="submit" pButton  label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)" ></button>             
+                                                          </div> 
+                                                </div>
+                   
+                          <p-accordion [multiple]="true">
+                              <div class="ui-g-12">
+                           <!-- <p-panel header="Site Information" [toggleable]="true">     -->
+                              <p-accordionTab header="Site Information"  [selected]="true">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label  for="site-name">Site Name*</label>   
+                                                <!-- </div>
+                                                <div class="ui-g-12 ui-md-8"> -->
+                                                    <input id="site-name" type="text" size="30" pInputText autocomplete="off"
+                                                            [(ngModel)]="siteBean.siteName"  #siteName="ngModel" 
+                                                            name="siteName" [maxlength]="100" ng-required="true">  
+                                                </div>
+                                             
+                                                <div class="ui-g-12 ui-md-3">
+                                                  
+                                                        <label for="site-code">Site Code*</label>   
+                                                 
+                                                        <input id="site-code" type="text" size="30" pInputText  ng-required="true" autocomplete="off" [readOnly]="editFlag"
+                                                                [(ngModel)]="siteBean.siteCode"  #siteCode="ngModel"  name="siteCode" maxlength="50">      
+                                                
+                                                </div> 
+                                              
+                                              <div class="ui-g-12 ui-md-3">
+                                                
+                                                        <label for="site-type">Site Type*</label>   
+                                                
+                                                    <p-dropdown id="site-type"  autoWidth="false" [options]="siteTypeList"   [(ngModel)]="siteBean.siteTypeListID" name="siteType" 
+                                                         optionLabel="parameterListValue" [autoWidth]="false"  ng-required="true" 
+                                                         #siteType="ngModel" placeholder="Select an option" ></p-dropdown> 
+                                                
+                                              </div>
+                                              
+                                                <div class="ui-g-12 ui-md-3">
+                                                    
+                                                          <label for="site-status">Site Status*</label> 
+                                                   
+                                                        <p-dropdown id="site-status" [options]="siteStatusList"   [autoWidth]="false"  [(ngModel)]="siteBean.siteStatus"  
+                                                          name="siteStatus" #siteStatus="ngModel" 
+                                                          placeholder="Select an option"></p-dropdown>
+                                                      
+                                                    </div>
+                                            </div>        
+                                                   <!-- </p-panel> -->
+                                                   </p-accordionTab>
+                                                
+                                  </div>   
+                                  <div class="ui-g-12">               
+                                           <!-- <p-panel header="Site Contact Details" [toggleable]="true">   -->
+                                              
+                                                  <p-accordionTab header="Site Contact Details"  [selected]="true">
+                                                      <div class="ui-g-12 ui-md-12">
+                                                          <div class="ui-g-12 ui-md-6">
+                                                              <label  for="address1">Address 1</label>  
+                                                          
+                                                              <input id="address1" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.address1"  #address1="ngModel" 
+                                                                      name="address1" maxlength="100" ng-required="true">  
+                                                          </div>
+                                                          <div class="ui-g-12 ui-md-6">
+                                                              <label  for="address2">Address 2</label>   
+                                                          
+                                                              <input id="address2" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.address2"  #address2="ngModel" 
+                                                                      name="address2" maxlength="100" ng-required="true">  
+                                                          </div>
+                                                      </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                          <div class="ui-g-12 ui-md-3">
+                                                              <label  for="city">City</label> 
+                                                              <input id="city" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.city"  #city="ngModel" 
+                                                                      name="city" maxlength="50" ng-required="true">  
+                                                          </div>
+                                                        <div class="ui-g-12 ui-md-3">
+                                                            <label  for="zip-code">Zip Code</label>   
+                                                            <input id="zip-code" type="text" size="30" pInputText autocomplete="off"
+                                                                    [(ngModel)]="siteBean.zipCode"  #zipCode="ngModel" 
+                                                                    name="zipCode" maxlength="50" ng-required="true">  
+                                                        </div>
+                                                          <div class="ui-g-12 ui-md-3">
+                                                              <label  for="state">State</label> 
+                                                              <input id="state" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.state"  #state="ngModel" 
+                                                                      name="state" maxlength="50" ng-required="true">  
+                                                      </div>
+                                                        <div class="ui-g-12 ui-md-3">
+                                                            <label  for="country">Country</label>   
+                                                            <input id="country" type="text" size="30" pInputText autocomplete="off"
+                                                                    [(ngModel)]="siteBean.country"  #country="ngModel" 
+                                                                    name="country" maxlength="50" ng-required="true">  
+                                                        </div>
+                                                </div>        
+                                                <div class="ui-g-12 ui-md-12">
+                                                            <div class="ui-g-12 ui-md-3">
+                                                              <label  for="work-phone">Work Phone</label>   
+                                                              <input id="work-phone" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.workPhone"  #workPhone="ngModel" 
+                                                                      name="workPhone" maxlength="20" ng-required="true">  
+                                                            </div>
+                                                            <div class="ui-g-12 ui-md-3">
+                                                              <label  for="fax">Fax</label> 
+                                                              <input id="fax" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.faxPhone"  #faxPhone="ngModel" 
+                                                                      name="faxPhone" maxlength="20" ng-required="true">  
+                                                            </div>
+                                                            <div class="ui-g-12 ui-md-3">
+                                                              <label  for="email-address">Email Address*</label> 
+                                                              <input id="email-address" type="text" size="30" pInputText autocomplete="off"
+                                                                      [(ngModel)]="siteBean.emailID"  #emailID="ngModel" 
+                                                                      name="emailID" maxlength="100" ng-required="true"> 
+                                                            </div>
+
+                                                        <div class="ui-g-12 ui-md-3">
+                                                            <label  for="notes">Notes</label>  
+                                                            <input id="notes" type="text" size="30" pInputText autocomplete="off"
+                                                                    [(ngModel)]="siteBean.notes"  #notes="ngModel" 
+                                                                    name="notes" maxlength="500" ng-required="true">  
+                                                        </div>
+                                                    </div>
+                                                      </p-accordionTab>
+                                                    
+                                                     <!-- </p-panel> -->
+                                                     </div>
+                                                    </p-accordion>
+                                                </div>
+                                          
+                                                </form>
+                       <!-- </p-tabPanel>
+                       </p-tabView> -->
+                    </div>      
+              
+                        </div>
+                   </div>
+                </div>  
+                <div class="custom-overlay-all" *ngIf="showPageSpinner">
+                    <div class="sendingEmail-all"></div>
+                  </div>              
+             <div class="msg">
+                <p-growl [(value)]="msgs"></p-growl>
+              </div>
+              <p-confirmDialog header="Confirmation" icon="fa fa-info" width="425"></p-confirmDialog>
+              
+             
+
+
+

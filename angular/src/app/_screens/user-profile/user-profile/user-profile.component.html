@@ -1,0 +1,232 @@
+<div class="ui-fluid">
+  <div class="ui-g">
+      <div class="ui-g-12">
+          <div class="card no-margin">
+                  <form novalidate #f="ngForm" (ngSubmit)="addUserProfile()">   
+                 <div class="ui-g form-group">  
+                      <div class="ui-g-12 ui-md-6">
+                      <h1>User Profile</h1> 
+                      </div>
+                      <div class="ui-g-12 ui-md-6">
+                        <div class="ui-g-12 ui-md-4"></div>
+                          <div class="ui-g-12 ui-md-4">
+                                <button type="button" pButton  label="Cancel" icon="fa fa-times" routerLink="/dashboard" ></button>      
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                  <button type="submit" pButton  label="Save" icon="fa fa-check" ></button>             
+                            </div> 
+                  </div>
+                     
+                      <p-accordion [multiple]="true">                       
+                        <div class="ui-g-12">
+                          <p-accordionTab header="User Information"  [selected]="true">
+                            <div class="ui-g-12 ui-md-12">
+                            
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="loginName">User Name*</label>   
+                                    <input id="loginName" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.loginName" 
+                                   #loginName="ngModel" name="loginName" maxlength="20">   
+                              </div>
+                          
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="title">Title</label>   
+                                    <input id="title" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.title"
+                                    maxlength="10" name="title"  #title="ngModel">  
+                                </div>
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="first-Name">First Name*</label>   
+                                    <input id="first-Name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.firstName" 
+                                    maxlength="50"  name="firstName"  #firstName="ngModel">   
+                              </div>
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="middal-Name">Middle Name</label>   
+                                    <input id="middal-Name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.middleName"
+                                    maxlength="50" name="middleName" #middleName="ngModel">  
+                                  </div> 
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="last-Name">Last Name*</label>   
+                                    <input id="last-Name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.lastName"
+                                    maxlength="50" name="lastName" #lastName="ngModel">  
+                                  </div> 
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="birth-Date">Birth Date</label>  
+                                 <p-calendar id="birth-Date"  [dateFormat]="dateFormat" autocomplete="off"
+                                             [monthNavigator]="true" [yearNavigator]="true" yearRange="1980:2015" readonlyInput="true" placeholder="Date" [(ngModel)]="userProfile.birthDate" 
+                                             name="birthDate" #birthDate="ngModel"  [showIcon]="true"
+                                ></p-calendar> 
+                                  </div>
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="gender">Gender</label> 
+                                      <p-dropdown id="gender" [options]="genderType" [(ngModel)]="userProfile.gender" name="gender" #gender="ngModel" 
+                                      [autoWidth]="false" placeholder="Select an option"> </p-dropdown> 
+                                    </div> 
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="user-Type">User Type*</label>   
+                                
+                                      <p-dropdown id="user-Type" [options]="userTypeStatus" [(ngModel)]="userProfile.userType" name="userType" #userType="ngModel"
+                                      [autoWidth]="false" placeholder="Select an option" > </p-dropdown>  
+                                        
+                              </div>
+                                  <div class="ui-g-12 ui-md-3">
+                                      <label  for="user-Status">User Status*</label> 
+                                      <p-dropdown id="user-Status" [options]="userStatusNames" [(ngModel)]="userProfile.userStatus" name="userStatus" #userStatus="ngModel" [autoWidth]="false" placeholder="Select an option"> </p-dropdown>  
+     
+                              </div>
+                         </div>
+                      </p-accordionTab>
+                      </div>
+                      <div class="ui-g-12">   
+              <p-accordionTab header="Contact Information"  [selected]="true">
+                    
+                          <div class="ui-g-12 ui-md-12">
+                              <div class="ui-g-12 ui-md-6">
+                                  <label  for="address-1">Address 1</label> 
+                                <input id="address-1" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.address1"
+                                maxlength="100" #address1="ngModel" name="address1">       
+                          </div>
+                              <div class="ui-g-12 ui-md-6">
+                                  <label  for="address-2">Address 2</label> 
+                                <input id="address-2" type="text" size="30" pInputText autocomplete="off"  [(ngModel)]="userProfile.address2"
+                                maxlength="100" #address2="ngModel" name="address2">  
+                              </div>   
+                              <div class="ui-g-12 ui-md-3">
+                                  <label  for="city">City</label> 
+                                <input id="city" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.city"
+                                maxlength="50" #city="ngModel" name="city">  
+                          </div>
+                              <div class="ui-g-12 ui-md-3">
+                                  <label  for="state">State</label> 
+                                <input id="state" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.state"
+                                maxlength="50" #state="ngModel" name="state">  
+                          </div>
+                              <div class="ui-g-12 ui-md-3">
+                                  <label  for="other-State">Other State</label>   
+                                <input id="other-State" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.otherState"
+                                maxlength="50" #otherState="ngModel" name="otherState">     
+                          </div>
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="zip-Code">Zip Code</label>   
+                                <input id="zip-Code" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.ZIPCode"
+                                maxlength="50" #ZIPCode="ngModel" name="ZIPCode">  
+                          </div>
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="country">Country</label>   
+                                <input id="country" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.country"
+                                maxlength="50" #country="ngModel" name="country">   
+                          </div>
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="home-Phone">Home Phone</label>   
+                                <input id="home-Phone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.homePhone"
+                                maxlength="20" #homePhone="ngModel" name="homePhone">  
+                          </div>
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="mobile-Phone">Mobile Phone</label>  
+                                <input id="mobile-Phone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.mobilePhone"
+                                maxlength="20" #mobilePhone="ngModel" name="mobilePhone">  
+                          </div>
+                         
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="work-Phone">Work Phone</label>   
+                                <input id="work-Phone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.workPhone"
+                                maxlength="20"  #workPhone="ngModel" name="workPhone">   
+                          </div>
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="fax">Fax</label> 
+                                <input id="fax" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.faxPhone"
+                                maxlength="20"  #faxPhone="ngModel" name="faxPhone">    
+                          </div>
+                          <div class="ui-g-12 ui-md-3">
+                                  <label  for="email">Email Address*</label>   
+                                <input id="email" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.emailAddress"
+                                maxlength="100" #email="ngModel"  name="email">     
+                          </div>
+                          </div>
+                  </p-accordionTab>
+                  </div>
+                  <div class="ui-g-12">   
+              <p-accordionTab header="Credentials Information"  [selected]="true">
+               <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-12">
+                <p-checkbox name="changePassword" label="Check if you want to change your password" binary="userProfile.changePasswordflag" [(ngModel)]="userProfile.changePasswordflag"
+                    (click)="onClear()"></p-checkbox>
+                 </div> <br>
+                 <div class="ui-g-12 ui-md-3">
+                        <label  for="current-Password">Current Password*</label>   
+                      <input id="current-Password" type="password" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.currentPassword"
+                      name="currentPassword" #currentPassword="ngModel" [disabled]="!userProfile.changePasswordflag">     
+                </div>
+                <div class="ui-g-12 ui-md-3">
+                        <label  for="new-Password">New Password*</label>   
+                      <input id="new-Password" type="password" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.newPassword"
+                      name="newPassword" #newPassword="ngModel" [disabled]="!userProfile.changePasswordflag">     
+                </div>
+                <div class="ui-g-12 ui-md-3">
+                        <label  for="confirm-new-Password">Confirm New Password*</label>   
+                      <input id="confirm-new-Password" type="password" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.confirmNewPassword"
+                      name="confirmNewPassword" #confirmNewPassword="ngModel" [disabled]="!userProfile.changePasswordflag">     
+                </div>
+              </div>
+              </p-accordionTab>   
+              </div>    
+              <div class="ui-g-12">   
+                    <p-accordionTab header="Security Information"  [selected]="true">
+                     <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g-12 ui-md-12">
+                                    <label  for="security-Question">Security Question*</label>   
+                                  <input id="security-Question" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.securityQuestion"
+                                  maxlength="500"  #securityQuestion="ngModel" name="securityQuestion">     
+                            </div> 
+                            <div class="ui-g-12 ui-md-12">
+                                    <label  for="security-Answer">Security Answer*</label>   
+                                  <input id="security-Answer" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="userProfile.securityAnswer"
+                                  maxlength="500"  #securityAnswer="ngModel" name="securityAnswer">     
+                            </div> 
+                        </div>
+                        </p-accordionTab>
+                        </div>
+                        <div class="ui-g-12">   
+                        <p-accordionTab header="Change Default Settings"  [selected]="true">
+                           <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g-12 ui-md-3">
+                             <label  for="default-Account">Default Account*</label> 
+                               <p-dropdown id="default-Account" [options]="defaultAccount"  [autoWidth]="false" 
+                                      [(ngModel)]="userProfile.accountID" #middleName="ngModel" name="accountID"  #accountID="ngModel"
+                                      optionLabel="accountName"  placeholder="Select an option"> 
+                              </p-dropdown> 
+                                </div>
+                           <div class="ui-g-12 ui-md-3">
+                            <label  for="default-Group">Default Role*</label> 
+                             <p-dropdown id="default-Group" [options]="defaultRole" [autoWidth]="false"  [(ngModel)]="userProfile.defaultRoleID" 
+                                         name="defaultRoleID" #defaultRoleID="ngModel"   placeholder="Select an option" > </p-dropdown> 
+                             </div> 
+                              <div class="ui-g-12 ui-md-3">
+                             <label  for="default-Site">Default Site*</label> 
+                             <p-dropdown id="default-Site" [options]="defaultSite" [(ngModel)]="userProfile.defaultSiteID" [autoWidth]="false"
+                             name="defaultSiteID" #defaultSiteID="ngModel" placeholder="Select an option" > 
+                            </p-dropdown> 
+                                 </div>
+                                 <div class="ui-g-12 ui-md-3">
+                               <label  for="Theme">Default Theme*</label> 
+                               <!-- <p-autoComplete [(ngModel)]="userProfile.theme" [suggestions]="brand" (completeMethod)="sample()"
+                               [size]="30"   [minLength]="1" placeholder="Hint: type any letter" dropdown="true" 
+                               #theme="ngModel"  name="theme"  field="theme" [forceSelection]="true">                                  
+                           </p-autoComplete>  -->
+                                  <p-dropdown id="Theme" [options]="" [(ngModel)]="userProfile.defaultTheme" #middleName="ngModel" [autoWidth]="false"
+                                 name="theme" #theme="ngModel" placeholder="Select an option"> </p-dropdown> 
+                                  </div>      
+                               </div>
+                              </p-accordionTab>
+                               </div>
+              </p-accordion>
+          </div>
+         </form>
+             </div>
+      </div> 
+  </div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+  <div class="sendingEmail-all"></div>
+</div>
+<div class="msg">
+  <p-growl [(value)]="msgs"></p-growl>
+</div>

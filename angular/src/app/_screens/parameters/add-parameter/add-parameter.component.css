@@ -1,0 +1,19 @@
+td.table-list-name{
+  /* cursor: pointer; */
+}
+.table-list-code{
+  word-wrap: break-word !important;
+  word-break: break-all !important;
+  word-break: break-all;
+}
+.table-list-status{
+  text-align: center !important;
+}
+.ShotProjectDtl{
+  text-align: center;
+}
+.link-pointer{
+  cursor: pointer;
+}
+  
+  

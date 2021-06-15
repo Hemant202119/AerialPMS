@@ -1,0 +1,73 @@
+<div class="login-body">
+  <div class="body-container">
+      <div class="ui-g">
+          <div class="ui-g-12 ui-lg-6 left-side">
+          </div>
+          <div class="ui-g-12 ui-lg-6 right-side">
+              <div class="login-wrapper">                
+                  <div class="login-container">
+                      <div class="logo-right-container">
+                          <img src="../assets/layout/images/Aerial/logo-2.png" alt="apollo-layout" class="logo" />
+                          <h2>Project Management System</h2>
+                          <span>Version {{versionNumber}}</span>
+                      </div>
+                      <span class="title">Login</span>
+                    <form name="form" novalidate #f="ngForm" (ngSubmit)="login()">
+                      <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                          <input type="text" autocomplete="off" [(ngModel)]="user.username"  #userName="ngModel"
+                                 name="userName" maxlength="20" ng-required="true"  placeholder="Username"  class="ui-inputtext ui-widget"/>
+                        </div>
+                        <div class="ui-g-12">
+                          <input type="password" autocomplete="off" [(ngModel)]="user.password"  #userPass="ngModel"
+                                 name="password" maxlength="20" required  placeholder="Password" class="ui-inputtext ui-widget" feedback="false"/>
+                        </div>
+
+                        <div class="ui-g-6" style="text-align: left;">
+                            <p-dropdown id="dropdown" [options]="items" [autoWidth]="false" (onChange)="changeTheme($event)">
+                            </p-dropdown>
+                        </div>
+                        <div class="ui-g-6">
+                          <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ">
+                            <span class="ui-button-text ui-c">
+                              <img src="../assets/layout/images/check.svg" alt="login" style="height: 13px;width: 16px;float: left;margin-top: 3px">
+                              Login
+                            </span>
+                          </button>
+                        </div>
+                        <div class="ui-g-6 ui-md-6 " style="margin: 0px -2px;" >
+                            <p-checkbox [(ngModel)]="checked" name="checked" binary="true" label="Set as Default Theme"></p-checkbox>
+                        </div>
+                        <div class="ui-g-6 ui-md-6 " >
+                           
+                        </div>
+                        <!-- <div class="ui-g-6 password-container">
+                            <a >Forgot Password?</a>
+                        </div> -->
+                        <div class="ediosLogo ui-sm-12 ui-md-6 ui-lg-6">
+                            <img src="../assets/layout/images/edois_logo.png" alt="apollo-layout" class="logo" />
+                        </div>
+                        <div class="copyRight ui-sm-12 ui-md-6 ui-lg-6">                          
+                                <div class="">Copyright © 2021 Edios Global. All Rights Reserved.</div>                       
+                        </div>
+                      </div>
+                      </form>
+                  </div>
+                  
+                    <div>
+                        <p-growl [value]="msgs" ></p-growl>
+                     </div>
+                      
+              </div>
+          </div>
+      </div>
+    
+  </div>
+</div>
+
+<!-- <div class="card no-margin">
+
+</div> -->
+
+
+

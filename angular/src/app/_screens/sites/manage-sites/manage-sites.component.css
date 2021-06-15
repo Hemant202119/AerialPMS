@@ -1,0 +1,22 @@
+
+.table-site-code{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+    word-break: break-all;
+  }  
+  .table-site-type{
+    width: 12.25em !important;
+    text-align: center !important;
+  }
+  .table-city{
+    width: 12.25em !important;
+    text-align: center !important;
+  }
+  .table-state{
+    width: 12.25em !important;
+    text-align: center !important;
+  }
+  .table-status-type{
+    width: 12.25em !important;
+    text-align: center !important;
+  }

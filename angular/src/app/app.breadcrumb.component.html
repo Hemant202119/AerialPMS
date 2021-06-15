@@ -1,0 +1,30 @@
+<div class="layout-breadcrumb">
+    <ul>
+        <li>
+            <a routerLink="/dashboard">
+                <i class="fa fa-home"></i>
+            </a>
+        </li>
+        <li>/</li>
+        <ng-template ngFor let-item let-last="last" [ngForOf]="items">
+            <li>
+                <a [routerLink]="item.routerLink" *ngIf="item.routerLink">{{item.label}}</a>
+                <ng-container *ngIf="!item.routerLink">{{item.label}}</ng-container>
+            </li>
+            <li *ngIf="!last">/</li>
+        </ng-template>
+    </ul>
+
+    <div class="layout-breadcrumb-options">
+        <!-- <a routerLink="/" title="Backup">
+          <i class="fa fa-cloud-upload"></i>
+        </a>
+        <a routerLink="/" title="Bookmark">
+          <i class="fa fa-bookmark"></i>
+        </a> -->
+        <a routerLink="" (click)="logout()" title="Logout">
+          <i class="fa fa-sign-out"></i>
+        </a>
+    </div>
+</div>
+<!-- <p-progressSpinner  *ngIf="true" class="progress-bar" [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s" ></p-progressSpinner>  -->

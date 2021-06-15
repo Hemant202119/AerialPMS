@@ -1,0 +1,87 @@
+<div class="ui-fluid">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="card no-margin">
+        <h1>MIS PO Wise Report</h1>
+        <div class="ui-g form-group">
+          <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-3">
+              <label for="circle">Circle*</label>
+              <p-dropdown autoWidth="false" [options]="circleNameList" optionLabel="circleName"  placeholder="All"  [(ngModel)]="reportBean.circle" [autoWidth]="false"  (onChange)="onCircleClick($event)" ></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label for="customer">Customer*</label>
+              <p-dropdown autoWidth="false" [options]="customerNameList" optionLabel="businessName"  placeholder="Select An Option" [(ngModel)]="reportBean.contact" [autoWidth]="false"></p-dropdown>
+              
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label for="site-type">Project category</label>
+              <p-dropdown autoWidth="false" [options]="projectSiteTypeList" [(ngModel)]="reportBean.siteType"  placeholder="Select An Option" optionLabel="categoryName" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label for="from-date">From Date (Allocation/Completion)</label>
+              <p-calendar id="from-date" [dateFormat]="dateFormat" placeholder="Date" readonlyInput="true" [(ngModel)]="reportBean.allocationDate" [showIcon]="true"></p-calendar>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label for="to-date">To Date (Allocation/Completion)</label>
+              <p-calendar id="to-date" [dateFormat]="dateFormat" placeholder="Date" readonlyInput="true" [(ngModel)]="reportBean.completionDate" [showIcon]="true"></p-calendar>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label>Search</label>
+              <button type="button" title="Search" pButton label="Search" icon="fa fa-search" (click)="getReports()"></button>
+
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label>Export</label>
+              <button type="button" title="Export" pButton label="Export" icon="fa fa-sign-out" [disabled]="this.reportTo==0" (click)="dt.exportCSV()"></button>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label>Reset</label>
+              <button type="button" title="Reset" pButton label="Reset" icon="fa fa-undo" (click)="resetAll()"></button>
+            </div>
+          </div>
+        </div>
+        <div class="card card-w-title main_tab">
+          <p-table #dt [value]="reportTo" [columns]="cols" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30,50,100]" [responsive]="true" class="tabsize" [exportFilename]="exportFileName">
+
+            <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngClass]="col.class" >
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th> 
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData  let-columns="columns" >
+            <tr [pSelectableRow]="rowData"  >
+                    
+                <td *ngFor="let col of columns; let idx=index"  [ngClass]="col.class">
+                  <span *ngIf="idx==5 || idx==6" > {{rowData[col.field] |dateFormat}}  </span>
+                  <span *ngIf="idx!=6  && idx!=5">{{rowData[col.field]}}  </span>
+                  
+                    
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="columns.length">
+                    No records found
+                </td>
+            </tr>
+        </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+        <p-overlayPanel #op3 [dismissable]="true" [showCloseIcon]="true" ng-class="overLay-Cstm">
+          <label style="width:450px;display:block;text-align:justify;">{{remarks}}</label>
+        </p-overlayPanel>
+        <div class="msg">
+          <p-growl [(value)]="errormsgs"></p-growl>
+        </div>
+        <p-confirmDialog header="Confirmation" icon="fa fa-info" width="425"></p-confirmDialog>
+        <div class="custom-overlay-all" *ngIf="showPageSpinner">
+          <div class="sendingEmail-all"></div>
+      </div>

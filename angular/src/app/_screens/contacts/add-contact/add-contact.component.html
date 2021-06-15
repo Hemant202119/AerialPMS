@@ -1,0 +1,290 @@
+<div class="ui-fluid">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="card no-margin">
+                <form novalidate #f="ngForm" (ngSubmit)="addContact()">
+                    <div class="ui-g form-group">
+                        <div class="ui-g-12 ui-md-6">
+                            <h1 *ngIf="!editFlag">Add Contact</h1>
+                            <h1 *ngIf="editFlag">Edit Contact</h1>
+
+                        </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <div class="ui-g-12 ui-md-4"></div>
+                            <div class="ui-g-12 ui-md-4">
+                                <button pButton type="button" label="Cancel" icon="fa fa-times" routerLink="/contacts"> </button>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                <button pButton type="submit" label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                            </div>
+                        </div>
+
+
+                        <p-accordion [multiple]="true">
+                            <div class="ui-g-12">
+                                <p-accordionTab header="Contact Information" [selected]="true">
+                                    <!-- <div class="ui-g">         -->
+                                    <div class="ui-g-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <label>Contact Type*</label>
+                                            <div class="ui-g">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <p-radioButton name="contactType" value="Customer" label="Customer" [(ngModel)]="contact.contactType" inputId="Customer">
+                                                    </p-radioButton>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <p-radioButton name="contactType" value="Contractor" label="Contractor" [(ngModel)]="contact.contactType" inputId="Contractor"></p-radioButton>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <p-radioButton name="contactType" value="Supplier" label="Supplier" [(ngModel)]="contact.contactType" inputId="Supplier"></p-radioButton>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- <div class="ui-g-12 ui-md-6">
+                    <div class="ui-g-12 ui-md-4">
+                        <label for="entity-Type">Entity Type</label>   
+                </div>
+                <div class="ui-g-12 ui-md-8">
+                        <p-dropdown  autoWidth="false" [options]="entityStatus" [(ngModel)]="contact.entityType" name="entityType" 
+                        optionLabel="name" #entityType="ngModel" placeholder="Select an option" [disabled]="editFlag">
+                        </p-dropdown>
+                   </div>
+                  </div> -->
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="entity-Type">Entity Type</label>
+                                            <p-dropdown id="entity-Type" [autoWidth]="false" [options]="entityStatus" [(ngModel)]="contact.entityType" name="entityType"
+                                                #entityType="ngModel" placeholder="Select an option" [disabled]="editFlag">
+                                            </p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="contact-Status">Contact Status</label>
+                                            <p-dropdown id="contact-Status" [options]="contactStatusDrpdown" [(ngModel)]="contact.contactStatus" name="contactStatus"
+                                                [autoWidth]="false" ng-required="true" #contactStatus="ngModel">
+                                            </p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="business-Name">Business Name</label>
+                                            <input id="business-Name" type="text" pInputText ng-required="true" [(ngModel)]="contact.businessName" #businessName="ngModel"
+                                                name="businessName" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="business-Id">Business ID</label>
+                                            <input id="business-Id" type="text" pInputText ng-required="true" [(ngModel)]="contact.businessID" #businessID="ngModel"
+                                                name="businessID" maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+
+
+                                    <h1> &nbsp; Primary Contact</h1>
+
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="first-Name">First Name</label>
+                                            <input id="first-Name" type="text" pInputText ng-required="true" [(ngModel)]="contact.firstName" #firstName="ngModel" name="firstName"
+                                                maxlength="30" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="last-Name">Last Name</label>
+                                            <input id="last-Name" type="text" pInputText ng-required="true" [(ngModel)]="contact.lastName" #lastName="ngModel" name="lastName"
+                                                maxlength="30" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="position">Position</label>
+                                            <input id="pc-Position" type="text" pInputText ng-required="true" [(ngModel)]="contact.Position" #Position="ngModel" name="Position"
+                                                maxlength="30" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="email-adress">Email Address</label>
+                                            <input id="email-adress" type="text" pInputText ng-required="true" [(ngModel)]="contact.emailAddress" #emailAddress="ngModel"
+                                                name="emailAddress" maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="phone-No">Phone No.</label>
+                                            <input id="phone-No" type="text" pInputText pKeyFilter="num" ng-required="true" [(ngModel)]="contact.phoneNo" #phoneNo="ngModel"
+                                                name="phoneNo" maxlength="11" autocomplete="off">
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="mobile-No">Mobile No.</label>
+                                            <input id="mobile-No" type="text" pInputText pKeyFilter="num" ng-required="true" [(ngModel)]="contact.mobileNo" #mobileNo="ngModel"
+                                                name="mobileNo" maxlength="10" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="fax-No">Fax No.</label>
+                                            <input id="fax-No" type="text" pInputText ng-required="true" [(ngModel)]="contact.faxNo" #faxNo="ngModel" name="faxNo" maxlength="50"
+                                                autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="web-Site">Web Site</label>
+                                            <input id="web-Site" type="text" pInputText ng-required="true" [(ngModel)]="contact.webSite" #webSite="ngModel" name="webSite"
+                                                maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <!-- </p-panel> -->
+                                </p-accordionTab>
+                            </div>
+                            <div class="ui-g-12">
+                                <!-- <p-panel header="Postal Address" [toggleable]="true">  -->
+                                <p-accordionTab header="Postal Address" [selected]="true">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <label for="postal-address1">Address 1</label>
+                                            <input id="postal-address1" type="text" pInputText ng-required="true" [(ngModel)]="contact.postalAddress1" #postalAddress1="ngModel"
+                                                name="postalAddress1" maxlength="100" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <label for="postal-address2">Address 2</label>
+                                            <input id="postal-address2" type="text" pInputText ng-required="true" [(ngModel)]="contact.postalAddress2" #postalAddress2="ngModel"
+                                                name="postalAddress2" maxlength="100" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="postal-City">City</label>
+                                            <input id="postal-City" type="text" pInputText ng-required="true" [(ngModel)]="contact.postalCity" #postalCity="ngModel"
+                                                name="postalCity" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="postal-Pincode"> Pincode</label>
+                                            <input id="postal-Pincode" type="text" pInputText ng-required="true" [(ngModel)]="contact.postalPincode" #postalPincode="ngModel"
+                                                name="postalPincode" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="postal-State">State</label>
+                                            <input id="postal-State" type="text" pInputText ng-required="true" [(ngModel)]="contact.postalState" #postalState="ngModel"
+                                                name="postalState" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="postal-Country">Country</label>
+                                            <input id="postal-Country" type="text" pInputText ng-required="true" [(ngModel)]="contact.postalCountry" #postalCountry="ngModel"
+                                                name="postalCountry" maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                </p-accordionTab>
+                            </div>
+                            <div class="ui-g-12 ui-md-4">
+                                <p-checkbox name="cg" label="Billing Address is same as Postal Address" binary="postalBilingSame" [(ngModel)]="postalBilingSame"
+                                    (click)="onClear()"></p-checkbox>
+                            </div>
+                            <div class="ui-g-12">
+                                <p-accordionTab header="Billing Address" [selected]="true">
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <label for="billing-Address1">Address 1</label>
+                                            <input id="billing-Address1" type="text" pInputText ng-required="true" [(ngModel)]="contact.billingAddress1" #billingAddress1="ngModel"
+                                                [disabled]="postalBilingSame" name="billingAddress1" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <label for="billing-Address2">Address 2</label>
+                                            <input id="billing-Address2" type="text" pInputText ng-required="true" [(ngModel)]="contact.billingAddress2" #billingAddress2="ngModel"
+                                                [disabled]="postalBilingSame" name="billingAddress2" maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="billing-City">City</label>
+                                            <input id="billing-City" type="text" pInputText ng-required="true" [(ngModel)]="contact.billingCity" #billingCity="ngModel"
+                                                [disabled]="postalBilingSame" name="billingCity" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="billing-Pincode"> Pincode</label>
+                                            <input id="billing-Pincode" type="text" pInputText ng-required="true" [(ngModel)]="contact.billingPincode" #billingPincode="ngModel"
+                                                [disabled]="postalBilingSame" name="billingPincode" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="billing-State">State</label>
+                                            <input id="billing-State" type="text" pInputText ng-required="true" [(ngModel)]="contact.billingState" #billingState="ngModel"
+                                                [disabled]="postalBilingSame" name="billingState" maxlength="50" autocomplete="off">
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="billing-Country"> Country</label>
+                                            <input id="billing-Country" type="text" pInputText ng-required="true" [(ngModel)]="contact.billingCountry" #billingCountry="ngModel"
+                                                [disabled]="postalBilingSame" name="billingCountry" maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+
+
+                                </p-accordionTab>
+                            </div>
+                            <div class="ui-g-12">
+                                <p-accordionTab header="Other Information" [selected]="true">
+
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="bank-Name">Bank Name</label>
+                                            <input id="bank-Name" type="text" pInputText ng-required="true" [(ngModel)]="contact.bankName" #bankName="ngModel" name="bankName"
+                                                maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="branch-Address">Branch Address</label>
+                                            <input id="branch-Address" type="text" pInputText ng-required="true" [(ngModel)]="contact.branchAddress" #branchAddress="ngModel"
+                                                name="branchAddress" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="account-Number">Account Number</label>
+                                            <input id="account-Number" type="text" pInputText ng-required="true" [(ngModel)]="contact.accountNo" #accountNo="ngModel"
+                                                name="accountNo" maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="account-Holder-Name">Account Holder Name</label>
+                                            <input id="account-Holder-Name" type="text" pInputText ng-required="true" [(ngModel)]="contact.accountHolderName" #accountHolderName="ngModel"
+                                                name="accountHolderName" maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="ifsc-Code">IFSC Code</label>
+                                            <input id="ifsc-Code" type="text" pInputText ng-required="true" [(ngModel)]="contact.ifscCode" #ifscCode="ngModel" name="ifscCode"
+                                                maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="pan-Number">PAN Number</label>
+                                            <input id="pan-Number" type="text" pInputText ng-required="true" [(ngModel)]="contact.panNo" #panNo="ngModel" name="panNo"
+                                                maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="GST-Number">GST Number</label>
+                                            <input id="GST-Number" type="text" pInputText ng-required="true" [(ngModel)]="contact.gstNo" #gstNo="ngModel" name="gstNo"
+                                                maxlength="50" autocomplete="off">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="aadhar-Number">Aadhar Number</label>
+                                            <input id="aadhar-Number" type="text" pInputText ng-required="true" [(ngModel)]="contact.aadharNo" #aadharNo="ngModel" name="aadharNo"
+                                                maxlength="50" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-12">
+                                            <label for="notes">Notes</label>
+                                            <input id="notes" type="text" pInputText ng-required="true" [(ngModel)]="contact.notes" #notes="ngModel" name="notes" maxlength="50"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <!-- </p-panel>  -->
+                                </p-accordionTab>
+                            </div>
+                        </p-accordion>
+                    </div>
+                </form>
+                <!-- </p-tabPanel></p-tabView> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+    <div class="sendingEmail-all"></div>
+  </div>
+<div class="msg">
+    <p-growl [(value)]="msgs"></p-growl>
+</div>

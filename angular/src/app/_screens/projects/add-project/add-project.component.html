@@ -1,0 +1,2251 @@
+<div class="ui-fluid">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-12">
+                <div class="card no-margin">
+                    <h1>{{breadLabel}}</h1>
+                    <p-tabView (onChange)="onTabChange($event)">
+                        <!-- Edit Project Tab -->
+                        <p-tabPanel header="Projects" id="pro" leftIcon="fa-check">
+                            <form novalidate #f="ngForm" (ngSubmit)="addProjectData()">
+                                <div class="ui-g form-group">
+                                    <div class="ui-g-12 ui-md-6">
+
+                                    </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <div class="ui-g-12 ui-md-4"></div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/projects"></button>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <button type="submit" pButton label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="customer-name">Customer Name*</label>
+                                            <p-autoComplete [(ngModel)]="project.contactID" [suggestions]="filteredContactsSingle" (completeMethod)="filterContactSingle($event)"
+                                                [size]="30" [readonly]="editFlag" [minLength]="1" placeholder="Hint: type any letter"
+                                                #customerName="ngModel" field="businessName" name="customerName" dropdown="cagatay"
+                                                [forceSelection]="true" (onSelect)="circlesOfParticularCustomer($event)">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="circle-name">Circle Name*</label>
+                                            <p-autoComplete [(ngModel)]="project.circleID" [suggestions]="filteredCirclesSingle" (completeMethod)="filterCircleSingle($event)"
+                                                [size]="30" [readonly]="editFlag" [minLength]="1" placeholder="Hint: type any letter"
+                                                #circleName="ngModel" field="circleName" name="circleName" dropdown="cagatay"
+                                                [forceSelection]="true">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="project-name">Project Name*</label>
+                                            <input id="project-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.siteName" #projectName="ngModel"
+                                                [readonly]="true" name="projectName" maxlength="50" ng-required="true">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="project-category">Project Category*</label>
+                                            <p-autoComplete [(ngModel)]="project.categoryID" [suggestions]="filteredProjectCategoriesSingle" (completeMethod)="filterProjectCategorySingle($event)"
+                                                [readonly]="editFlag" [size]="30" [minLength]="1" placeholder="Hint: type any letter"
+                                                dropdown="cagatay" #categoryName="ngModel" name="categoryName" field="categoryName"
+                                                [forceSelection]="true">
+                                            </p-autoComplete>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="execution-model">Execution Model*</label>
+                                            <p-autoComplete [(ngModel)]="project.execModelID" [suggestions]="filteredExecutionModelsSingle" (completeMethod)="filterExecutionModelSingle($event)"
+                                                [size]="30" [readonly]="editFlag" [minLength]="1" placeholder="Hint: type any letter"
+                                                dropdown="cagatay" #execModelName="ngModel" field="execModelName" name="execModelName"
+                                                [forceSelection]="true" (onSelect)="drawingTypeValues(project.execModelID)">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="drawing-type">Drawing type*</label>
+                                            <p-autoComplete [(ngModel)]="project.drawingTypeID" [suggestions]="filteredDrawingTypesSingle" (completeMethod)="filterDrawingTypeSingle($event)"
+                                                [size]="30" [readonly]="editFlag" [minLength]="1" placeholder="Hint: type any letter"
+                                                dropdown="cagatay" #drawingTypeName="ngModel" field="drawingTypeName" name="drawingTypeName"
+                                                [forceSelection]="true">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="site-ID">Site ID*</label>
+                                            <input id="site-ID" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.siteID" #siteID="ngModel" name="siteID"
+                                                maxlength="30" ng-required="true">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="site-name">Site Name*</label>
+                                            <input id="site-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.siteName" #siteName="ngModel"
+                                                name="siteName" maxlength="50" ng-required="true">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="allocation-date">Allocation Date*</label>
+
+                                            <p-calendar id="allocation-date" [dateFormat]="dateFormat" readonlyInput="true" placeholder="Date" (onSelect)="setCurrentDateValue()"
+                                                [(ngModel)]="project.allocationDate" #allocationDate="ngModel" name="allocationDate"
+                                                [showIcon]="true" [disabled]="editFlag"></p-calendar>
+
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="completion-date">Completion Date</label>
+                                            <p-calendar id="completion-date" [dateFormat]="dateFormat" placeholder="Date" readonlyInput="true" [showIcon]="true" [(ngModel)]="project.completionDate"
+                                                #completionDate="ngModel" name="completionDate"></p-calendar>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="status-date">Current Status Date*</label>
+                                            <p-calendar id="status-date" [dateFormat]="dateFormat" placeholder="Date" [disabled]="true" [(ngModel)]="project.statusDate"
+                                                #statusDate="ngModel" [showIcon]="true" name="statusDate"></p-calendar>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="current-status">Current Status*</label>
+                                            <p-dropdown autoWidth="false" [options]="statusValueList" [(ngModel)]="project.statusListID" name="aaa" optionLabel="parameterListValue"
+                                                [autoWidth]="false" [readonly]="true" #aaa="ngModel"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="site-type">Site Type*</label>
+                                            <p-dropdown autoWidth="false" [options]="siteTypeListv" [(ngModel)]="project.siteTypeListID" name="bbb" optionLabel="parameterListValue"
+                                                [autoWidth]="false" #bbb="ngModel" placeholder="Select an option"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="zone">Zone</label>
+                                            <input id="zone" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.zone" #zone="ngModel" name="zone"
+                                                maxlength="30">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <label for="address">Address</label>
+                                                <input id="address" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.address" #address="ngModel"
+                                                    name="address" maxlength="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="city">City</label>
+                                            <input id="city" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.city" #city="ngModel" name="city"
+                                                maxlength="30">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="district">District</label>
+                                            <input id="district" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.district" #district="ngModel"
+                                                name="district" maxlength="30">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="longitude">Longitude</label>
+                                            <input id="longitude" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.longitude" #longitude="ngModel"
+                                                name="longitude" maxlength="20">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="latitude">latitude</label>
+                                            <input id="latitude" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.latitude" #latitude="ngModel"
+                                                name="latitude" maxlength="20">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="height">Height</label>
+                                            <input id="height" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.height" #height="ngModel" name="height"
+                                                maxlength="30">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-3">
+                                            <label for="atAgency">AT Agency</label>
+                                            <input id="atAgency" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="project.atAgency" #atAgency="ngModel"
+                                                name="atAgency" maxlength="50">
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-12">
+                                            <label for="notes">Notes</label>
+                                            <textarea id="notes" [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" [(ngModel)]="project.notes" #notes="ngModel"
+                                                autocomplete="off" name="notes" maxlength="500"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </p-tabPanel>
+                        <!-- Budget Ordered Quantity Tab -->
+                        <p-tabPanel header="Project BOQ" leftIcon="fa-check" *ngIf="this.editFlag" [disabled]="tabFlag1">
+                            <div class="ui-g form-group">
+
+                                <!-- <div class="ui-g-12 ui-md-12">
+                                                        
+                                                </div> -->
+                                <div class="ui-g-12 ui-md-2">
+
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <h2 class="center-align">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/projects"></button>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="submit" pButton label="Add Project BOQ" icon="fa fa-check" (click)="showDialogToAddBOQ()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="ui-g form-group">
+                                <div class="ui-g-12 ui-md-10">
+                                </div>
+                                <div class="ui-g-12 ui-md-2">
+                                    <label>Grand Total Amount :</label>
+                                    {{boqBeanObject.grandTotalOfBOQ}}
+                                </div>
+
+                            </div>
+                            <div class="card card-w-title">
+                                <p-table #boq [value]="boqtableSearch" scrollable="true" scrollHeight="200px" [columns]="boqCols" [paginator]="true" [rows]="5"
+                                    [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngClass]="col.class">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData">
+                                            <td class="status-date">
+                                                <button type="button" title="View Project BOQ" (click)="editProjectBOQ(rowData.boqID)" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.viewAccess"
+                                                    pButton></button>&nbsp;&nbsp; {{rowData.boqdate | dateFormat}}
+                                            </td>
+                                            <td class="status-name ">{{rowData.totalBoqAmount}}</td>
+                                            <td class="status-name ">{{rowData.boqUserName}}</td>
+                                            <td class="status-note">{{rowData.boqNotes}}</td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <p-dialog [header]="projectStatusDialogHeader" [(visible)]="displayProjectBOQDialog" [responsive]="true" showEffect="fade"
+                                [modal]="true" [width]="1270" [contentStyle]="{'max-height':'650px','height':'auto'}">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="addProjectBOQ()" style="width:100%;">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-2"></div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <h2 class="center-align">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="boqEditFlag" [disabled]="boqEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="boq-date">Date*</label>
+                                                    <p-calendar id="po-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="boqBeanObject.boqdate"
+                                                        #boqdate="ngModel" name="boqdate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-9">
+                                                    <label for="status-notes">Notes</label>
+                                                    <input id="invoice-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="boqBeanObject.boqNotes" #boqNotes="ngModel"
+                                                        name="boqNotes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p-table [value]="boqDrawingItems" scrollable="true" scrollHeight="200px" [columns]="boqcolsTwo" dataKey="itemID" [paginator]="true"
+                                            [rows]="10" [(selection)]="selectedboqDrawingItems" [rowsPerPageOptions]="[10,20,30]"
+                                            [responsive]="true" (onRowSelect)="onBOQRowSelect()" (onRowUnselect)="onBOQRowUnSelect($event)">
+
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th style="width: 3.25em" *ngIf="!boqEditFlag">
+                                                    </th>
+                                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                        {{col.header}}
+                                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                                <tr [pSelectableRow]="rowData">
+                                                    <td style="width:46px;" *ngIf="!boqEditFlag">
+                                                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                                    </td>
+                                                    <td>{{rowData.itemName}}</td>
+                                                    <td class="center-align ">{{rowData.itemUnit}}</td>
+                                                    <td class="center-align ">{{rowData.itemQty}}</td>
+                                                    <td *ngIf="boqEditFlag" class="center-align ">{{rowData.itemUnitRate}} </td>
+                                                    <td pEditableColumn *ngIf="!boqEditFlag">
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input type="text" pInputText [(ngModel)]="rowData.itemUnitRate" #itemUnitRate="ngModel" autocomplete="off" name="itemUnitRate"
+                                                                    maxlength="20" (keyup)="onBOQRowSelect()" [readonly]="rowData.newProcurementQty==null">
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                <span style="line-height: 30px;"> {{rowData.itemUnitRate}} </span>
+                                                                <button type="button" title="Edit Suplier" icon="fa fa-edit" pButton></button>
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+
+
+                                                    <td class="center-align ">{{rowData.budgetAmount}}</td>
+                                                    <!-- <td>{{rowData.qtyApprovedforProcurement}}</td>  
+                                                          <td>{{rowData.alreadySpent}}</td>   -->
+                                                    <td pEditableColumn *ngIf="!boqEditFlag">
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input type="text" pInputText [(ngModel)]="rowData.newProcurementQty" #newProcurementQty="ngModel" autocomplete="off" name="newProcurementQty"
+                                                                    maxlength="20" (keyup)="onBOQRowSelect()" [readonly]="rowData.newProcurementQty==null">
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                <span style="line-height: 30px;"> {{rowData.newProcurementQty}} </span>
+                                                                <button type="button" title="Edit Suplier" icon="fa fa-edit" pButton></button>
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <!-- <td>{{rowData.currentUnitRate}}</td>
+                                                            <td>{{rowData.currentUnitGST}}</td>
+                                                             <td>{{rowData.amount}}</td>New Amt -->
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage" let-columns>
+                                                <tr>
+                                                    <td [attr.colspan]="columns.length">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+
+
+                                    </form>
+                                </div>
+                            </p-dialog>
+                        </p-tabPanel>
+
+
+                        <!-- Project Status Tab                        -->
+                        <p-tabPanel header="Project Status" leftIcon="fa-check" *ngIf="this.editFlag">
+                            <div class="ui-g form-group">
+
+                                <!-- <div class="ui-g-12 ui-md-12">
+                                                          
+                                                  </div> -->
+                                <div class="ui-g-12 ui-md-2">
+
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <h2 class="center-align">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/projects"></button>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="submit" pButton label="Add Project Status" icon="fa fa-check" (click)="showDialogToAdd()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-w-title">
+                                <p-table #dt [value]="projectStatusesSearch" [columns]="cols" [paginator]="true" [rows]="5" scrollable="true" scrollHeight="200px"
+                                    [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngClass]="col.class">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData">
+
+                                            <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                <span *ngIf="idx == 0">
+                                                    {{rowData[col.field] | dateFormat}}
+                                                </span>
+                                                <span *ngIf="idx > 0">
+                                                    {{rowData[col.field]}}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+
+                                </p-table>
+                            </div>
+                            <p-dialog [header]="projectStatusDialogHeader" [(visible)]="displayProjectStatusDialog" [responsive]="true" showEffect="fade"
+                                [modal]="true" [width]="900">
+
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="addProjectStatus()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="current-status-date">Current Status Date*</label>
+                                                    <p-calendar id="current-status-date" [dateFormat]="dateFormat" placeholder="Date" [disabled]="editFlag" [(ngModel)]="project.statusDate"
+                                                        #currentStatusDate="ngModel" [showIcon]="true" readonlyInput="true" name="currentStatusDate"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="current-status-project">Current Status*</label>
+                                                    <p-dropdown autoWidth="false" [options]="statusValueList" [(ngModel)]="project.statusListID" name="currentStatusValue" optionLabel="parameterListValue"
+                                                        [autoWidth]="false" [readonly]="true" #currentStatusValue="ngModel"></p-dropdown>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="new-status-date">New Status Date*</label>
+                                                    <p-calendar id="new-status-date" [dateFormat]="dateFormat" placeholder="Date" [(ngModel)]="projectStatuses.statusDate" #newStatusDate="ngModel"
+                                                        [showIcon]="true" name="newStatusDate"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="new-status">New Status*</label>
+                                                    <p-dropdown autoWidth="false" [options]="statusValueList" [(ngModel)]="projectStatuses.statusListID" optionLabel="parameterListValue"
+                                                        [autoWidth]="false" name="newStatusValue" #newStatusValue="ngModel" placeholder="Select An Option"></p-dropdown>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label for="status-notes">Notes</label>
+                                                    <textarea id="status-notes" [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" [(ngModel)]="projectStatuses.notes"
+                                                        #statusNotes="ngModel" name="statusNotes" maxlength="500"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </p-dialog>
+                        </p-tabPanel>
+
+
+
+
+                        <!-- Customer POs Tab  -->
+                        <p-tabPanel header="Customer PO" leftIcon="fa-check" *ngIf="this.editFlag" [disabled]="tabFlag2">
+                            <div class="ui-g form-group">
+                                <!-- <div class="ui-g-12 ui-md-12">
+                                                          
+                                                     </div>                                                    -->
+                                <div class="ui-g-12 ui-md-2">
+                                    <div class="ui-g-12">
+                                        <!-- <button type="button" pButton  label="Add Invoice" icon="fa fa-check" (click)="showAddInvoiceDialog()"  ></button>  -->
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <h2 class="center-align">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/projects"></button>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="submit" pButton label="Add Customer PO" icon="fa fa-check" (click)="showPODialog()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="card card-w-title">
+                                <p-table #dt [value]="customerPOsearch" [columns]="customerpocols" scrollable="true" scrollHeight="200px" [paginator]="true"
+                                    [rows]="5" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData">
+
+                                            <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                <span *ngIf="idx == 0">
+                                                    <button type="button" title="Edit Customer PO" (click)="editCustomerPO(rowData[col.id])" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                        pButton></button>&nbsp;&nbsp;{{rowData[col.field]}}
+                                                </span>
+                                                <span *ngIf="idx == 1">
+                                                    {{rowData[col.field] | dateFormat}}
+                                                </span>
+                                                <span *ngIf="idx > 1 && idx != 6 ">
+                                                    {{rowData[col.field]}}
+                                                </span>
+                                                <span *ngIf="idx == 6">
+                                                    <button type="button" pButton icon="fa fa-edit" [disabled]="oneTimeClick" (click)="showAddInvoiceDialog(rowData)" [disabled]="!roleRightsGuard.roleRights.updateAccess"></button>
+                                                    {{rowData[col.field]}}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <p-dialog header={{poDialogHeader}} [(visible)]="displayPODialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddPOs()">
+                                        <div class="ui-g form-group">
+
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="po-no">PO No.*</label>
+                                                    <input id="po-no" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="customerPOs.poNo" #poNo="ngModel" name="poNo"
+                                                        maxlength="20">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="po-date">PO Date*</label>
+                                                    <p-calendar id="po-date" [dateFormat]="dateFormat" readonlyInput="true" placeholder="Date" autocomplete="off" [(ngModel)]="customerPOs.poDate"
+                                                        #poDate="ngModel" name="poDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="basic-amount">PO Amount*</label>
+                                                    <input id="basic-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="preparePOsTotal()" [(ngModel)]="customerPOs.basicAmount"
+                                                        #basicAmount="ngModel" name="basicAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="gst">GST Amount*</label>
+                                                    <input id="gst" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="customerPOs.taxAmount" #gst="ngModel" (keyup)="preparePOsTotal()"
+                                                        name="gst" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="total-amount">Total Amount</label>
+                                                    <input id="total-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="customerPOs.totalAmount" #totalAmount="ngModel"
+                                                        name="totalAmount" maxlength="10" pKeyFilter="int" readonly>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="activity-type">Activity Type*</label>
+                                                    <p-dropdown autoWidth="false" [options]="activityTypeList" [(ngModel)]="customerPOs.activityTypeListID" optionLabel="parameterListValue"
+                                                        [autoWidth]="false" name="activityType" #activityType="ngModel" placeholder="Select An Option"></p-dropdown>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label for="po-notes">Notes</label>
+                                                    <input id="po-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="customerPOs.notes" #poNotes="ngModel"
+                                                        name="poNotes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="CustomerPOsEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </p-dialog>
+                            <p-dialog header="{{invoiceDialogHeader}}" [(visible)]="displayAddInvoiceDialog" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddInvoice()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align" *ngIf="this.poFlag">
+                                                    <span></span>{{activityLabel}}&nbsp;(PO No.:{{customerPOs.poNo}} &nbsp;Dated:{{customerPOs.poDate
+                                                    | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-no">Invoice No.*</label>
+                                                    <input id="invoice-no" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.invoiceNo" #invoiceNo="ngModel"
+                                                        name="invoiceNo" maxlength="20">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-date">Invoice Date*</label>
+                                                    <p-calendar id="invoice-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="invoiceDetails.invoiceDate"
+                                                        #invoiceDate="ngModel" name="invoiceDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-amount">Invoice Amount*</label>
+                                                    <input id="invoice-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="prepareInvoiceTotal()" [(ngModel)]="invoiceDetails.invoiceAmount"
+                                                        #invoiceAmount="ngModel" name="invoiceAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="gst-amount">GST Amount*</label>
+                                                    <input id="gst-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="prepareInvoiceTotal()" [(ngModel)]="invoiceDetails.gst"
+                                                        #invoiceGST="ngModel" name="invoiceGST" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="tot-amount">Total Amount</label>
+                                                    <input id="tot-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.totalAmount" #invoiceTotal="ngModel"
+                                                        readonly name="invoiceTotal" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-9">
+                                                    <label for="invoice-notes">Notes</label>
+                                                    <input id="invoice-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.notes" #invoiceNotes="ngModel"
+                                                        name="invoiceNotes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeInvoiceDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" [disabled]="(pendingInvoiceAmount=='0') || (InvoiceEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"
+                                                        label="Save"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total PO Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{customerPOs.totalAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Invoice Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalInvoiceAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Pending PO Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingInvoiceAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="invoiceSearch" [columns]="invoicecols" scrollable="true" scrollHeight="200px" [paginator]="true" [rows]="5"
+                                        [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Invoice" (click)="editInvoice(rowData[col.id])" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                            pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [value]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                        </p-tabPanel>
+
+                        <!-- Contractor PO tab -->
+                        <p-tabPanel header="Contractor PO" if="contractor-po" leftIcon="fa-check" *ngIf="this.editFlag" [disabled]="tabFlag3">
+                            <div class="ui-g form-group">
+                                <!-- <div class="ui-g-12 ui-md-12">
+                                                              
+                                                         </div>-->
+                                <div class="ui-g-12 ui-md-2">
+                                    <div class="ui-g-12">
+                                        <!-- <button type="button" pButton  label="Add Invoice" icon="fa fa-check" (click)="showAddContractorPOInvoiceDialog()"  ></button>  -->
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <h2 class="center-align bold-icon">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/projects"></button>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="submit" pButton label="Add Contractor PO" icon="fa fa-check" (click)="showContractorPODialog()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-w-title">
+                                <p-table #dt [value]="contractorPOsearch" [columns]="contractorpocols" scrollable="true" scrollHeight="200px" [paginator]="true"
+                                    [rows]="5" [(selection)]="selectedContractorPOs" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <!-- <th style="width: 3.25em">                                                                                  
+                                                                                          </th>  -->
+
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData">
+
+                                            <td>
+                                                <button type="button" title="Edit Contractor PO" [disabled]="!roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="editContractorPO(rowData.poID)" icon="fa fa-edit" pButton></button>&nbsp;&nbsp;{{rowData.businessName}}
+                                            </td>
+                                            <!-- <td>
+                                                <button type="button" title="Edit Contractor PO" [disabled]="rowData.poStatus=='Approved'||rowData.poStatus=='Partial Approved'||rowData.poStatus=='Rejected' || !roleRightsGuard.roleRights.updateAccess"
+                                                    (click)="editContractorPO(rowData.poID)" icon="fa fa-edit" pButton></button>&nbsp;&nbsp;{{rowData.businessName}}
+                                            </td> -->
+                                            <td class="center-align">
+                                                {{rowData.boqItemName }}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.poDate | dateFormat}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.poNo}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.basicAmount}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.taxAmount}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.totalAmount}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.poStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Generate Fund Request" [disabled]="(rowData.poStatus!='Approved' && rowData.poStatus!='Partial Approved') || oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="showFRDialog(rowData.poID)" icon="fa fa-edit" pButton></button>
+                                                {{rowData.frStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Update Payment Details" [disabled]="rowData.frStatus=='None'|| oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="showPaymentDetails(rowData.poID)" icon="fa fa-edit" pButton></button>
+                                                {{rowData.paymentStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Cancel PO" [disabled]="oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="CancleStatus2(rowData.poID,rowData) " icon="fa fa-edit" pButton></button>
+                                                {{"Cancel/Partial Cancel"}}
+                                            </td>
+
+                                            <td>
+                                                <button type="button" title="Update Invoice Details" [disabled]="(rowData.poStatus!='Approved' && rowData.poStatus!='Partial Approved') || oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="showAddContractorPOInvoiceDialog(rowData.poID)" icon="fa fa-edit"
+                                                    pButton></button>
+                                                {{rowData.invoiceStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Mail Reminder" [disabled]="oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled' || rowData.invoiceStatus=='Completed' || rowData.invoiceStatus=='None'"
+                                                    (click)="reminderIcon(rowData.poID,rowData) " icon="fa fa-edit" pButton></button>
+                                                {{"Mail Reminder"}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <!-- cancel poStatus -->
+                            <p-dialog header="{{paymentInvoiceDialogHeader}}" [(visible)]="CancleDialog2" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="cancelPO2()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-8">
+                                                            <label for="invoice-notes">Total PO Amount:</label>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                            <span>{{totalPaymentAmount}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-8">
+                                                            <label for="invoice-notes">Total Payment Amount:</label>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                            <span>{{addedPaymentAmount}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-8">
+                                                            <label for="invoice-notes">Pending Payment Amount:</label>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                            <span>{{pendingPaymentAmount}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+
+
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="payment-notes">Po Status</label>
+                                                    <!-- <p-dropdown id="job-status" [options]="poStatus" [autoWidth]="false" [(ngModel)]="purchaseOrdersBean.poStatus" name="poStatus"
+                        #poStatus="ngModel" placeholder="Select an option"></p-dropdown> -->
+                                                    <input id="payment-notes" type="text" disabled size="30" pInputText [(ngModel)]="purchaseOrdersBean.poStatus" #poStatus="ngModel"
+                                                        name="poStatus">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="payment-notes">Cancel Notes</label>
+                                                    <input id="payment-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="paymentDetails.notes" #paymentNotes="ngModel"
+                                                        name="paymentNotes" maxlength="500">
+                                                </div>
+                                                <div class="ui-g-11 ui-md-2">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeCancleStatusDialog2()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-11 ui-md-2">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingPaymentAmount=='0') || (paymentEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-12 ui-md-8"></div>
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                            <!-- Reminder icon -->
+
+                            <p-dialog header="{{paymentInvoiceDialogHeader}}" [(visible)]="reminderFlag" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="ReminderMails()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label>Additional Email Address*</label>
+                                                    <input id="amountDue1" type="text" pInputText ng-required="true" [(ngModel)]=payloadBean.searchParameter #searchParameter="ngModel"
+                                                        name="searchParameter" maxlength="500" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeCancleReminderDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]=""></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-12 ui-md-8"></div>
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                            <!-- end  -->
+                            <p-dialog header={{conPoDialogHeader}} [(visible)]="displayConPODialog" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddContractorPOs()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="contractor-name">Contractor Name*</label>
+                                                    <p-autoComplete [(ngModel)]="contractorPOs.contactID" [suggestions]="filteredContractorSingle" (completeMethod)="filterContractorTypeSingle($event)"
+                                                        [size]="30" [minLength]="1" placeholder="Hint: type any letter" dropdown="cagatay"
+                                                        #businessName="ngModel" field="businessName" name="businessName" [forceSelection]="true"
+                                                        [readonly]="ContractorPOsEditFlag">
+                                                    </p-autoComplete>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="po-no">PO No.*</label>
+                                                    <input id="po-no" type="text" size="30" pInputText autocomplete="off" placeholder="Auto Generated PO" [readonly]="true" [(ngModel)]="contractorPOs.poNo"
+                                                        #poNo="ngModel" name="poNo" maxlength="20">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="po-date">PO Date*</label>
+                                                    <p-calendar id="po-date" [dateFormat]="dateFormat" placeholder="Date" readonlyInput="true" autocomplete="off" [(ngModel)]="contractorPOs.poDate"
+                                                        #poDate="ngModel" name="poDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="basic-amount">PO Amount*</label>
+                                                    <input id="basic-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="preparePOsTotal()" [(ngModel)]="contractorPOs.basicAmount"
+                                                        #basicAmount="ngModel" name="basicAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="gst">GST Amount*</label>
+                                                    <input id="taxAmount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="contractorPOs.taxAmount" #gst="ngModel"
+                                                        (keyup)="preparePOsTotal()" name="gst" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="total-amount">Total Amount</label>
+                                                    <input id="total-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="contractorPOs.totalAmount" #totalAmount="ngModel"
+                                                        name="totalAmount" maxlength="10" pKeyFilter="int" readonly>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="activity-type">BOQ Items*</label>
+                                                    <!-- <p-dropdown autoWidth="false" [options]="activityTypeList" [(ngModel)]="contractorPOs.activityTypeListID" optionLabel="parameterListValue"
+                                                        [autoWidth]="false" name="activityType" #activityType="ngModel" placeholder="Select An Option"  [readonly]="ContractorPOsEditFlag"></p-dropdown>  -->
+                                                    <p-autoComplete id="driver-name" [suggestions]="filteredActivity" (completeMethod)="filteredActivityType($event)" [minLength]="1"
+                                                        placeholder="Hint: type any letter" [(ngModel)]="contractorPOs.activityTypeListID"
+                                                        [readonly]="ContractorPOsEditFlag" #activityTypeListID="ngModel" field="parameterListValue"
+                                                        name="activityTypeListID" dropdown="cagatay" [forceSelection]="true">
+                                                    </p-autoComplete>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3"></div>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label for="po-notes">Notes</label>
+                                                    <input id="po-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="contractorPOs.notes" #poNotes="ngModel"
+                                                        name="poNotes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]=" contractorPOs.poStatus=='Rejected' || (ContractorPOsEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </p-dialog>
+                            <p-dialog header="{{contractorPoInvoiceDialogHeader}}" [(visible)]="displayContractorPOAddInvoiceDialog" [responsive]="true"
+                                showEffect="fade" [modal]="true" [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddContractorPOInvoice()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align bold-icon" *ngIf="this.contractorPOFlag">
+                                                    <span></span>{{activityLabel}}&nbsp;(PO No.:{{contractorPOs.poNo}} &nbsp;Dated:{{contractorPOs.poDate
+                                                    | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-no">Invoice No.*</label>
+                                                    <input id="invoice-no" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.invoiceNo" #invoiceNo="ngModel"
+                                                        name="invoiceNo" maxlength="20">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-date">Invoice Date*</label>
+                                                    <p-calendar id="invoice-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="invoiceDetails.invoiceDate"
+                                                        #invoiceDate="ngModel" name="invoiceDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-amount">Invoice Amount*</label>
+                                                    <input id="invoice-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="prepareInvoiceTotal()" [(ngModel)]="invoiceDetails.invoiceAmount"
+                                                        #invoiceAmount="ngModel" name="invoiceAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="gst-amount">GST Amount*</label>
+                                                    <input id="gst-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="prepareInvoiceTotal()" [(ngModel)]="invoiceDetails.gst"
+                                                        #invoiceGST="ngModel" name="invoiceGST" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="tot-amount">Total Amount</label>
+                                                    <input id="tot-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.totalAmount" #invoiceTotal="ngModel"
+                                                        readonly name="invoiceTotal" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-9">
+                                                    <label for="invoice-notes">Notes</label>
+                                                    <input id="invoice-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.notes" #invoiceNotes="ngModel"
+                                                        name="invoiceNotes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeContractorInvoiceDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingInvoiceAmount=='0') || (InvoiceEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalFrAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total PO Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{contractorPOs.totalAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Invoice Received Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{addedContractorInvoice}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes"> Pending Invoice Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingInvoiceAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="ui-g-12 ui-md-3">
+                                                                              
+                                                                      </div>   -->
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="invoiceSearch" [columns]="invoicecols" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15]"
+                                        [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Invoice" (click)="editInvoice(rowData[col.id])" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                            pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [value]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+
+                            <!-- FR dialog -->
+                            <p-dialog header="{{frInvoiceDialogHeader}}" [(visible)]="displayFrDialog" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddFundRequest()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align bold-icon" *ngIf="this.contractorPOFlag">
+                                                    <span></span>{{CustomerName}}-{{activityLabel}}&nbsp;(PO No.:{{contractorPOs.poNo}}
+                                                    &nbsp;Dated:{{contractorPOs.poDate | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="fr-amount">FR Amount*</label>
+                                                    <input id="fr-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="frDetails.frAmount" #frAmount="ngModel"
+                                                        name="frAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="fr-date">FR Date*</label>
+                                                    <p-calendar id="fr-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="frDetails.frDate" #frDate="ngModel"
+                                                        name="frDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label for="email-addresses">Email Addresses*</label>
+                                                    <input id="email-addresses" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="frDetails.emailAddresses" #emailAddesses="ngModel"
+                                                        name="emailAddesses" maxlength="500">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label for="fr-notes">Notes</label>
+                                                    <input id="fr-notes" type="text" sclsdize="30" pInputText autocomplete="off" [(ngModel)]="frDetails.notes" #notes="ngModel"
+                                                        name="notes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeFrDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingFrAmount=='0') || (FrEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)) "></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total PO Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{contractorPOs.totalAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalFrAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Pending Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingFrAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="frSearch" [columns]="frcols" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Fund Request" (click)="editFR(rowData[col.id])" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                            pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [value]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+
+                            <!-- End OF FR dialog -->
+
+                            <!-- Payment Details -->
+                            <p-dialog header="{{paymentInvoiceDialogHeader}}" [(visible)]="displayPaymentDialog" [responsive]="true" showEffect="fade"
+                                [modal]="true" [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddPaymentDetails()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align bold-icon" *ngIf="this.contractorPOFlag">
+                                                    <span></span>{{activityLabel}}&nbsp;(PO No.:{{contractorPOs.poNo}} &nbsp;Dated:{{contractorPOs.poDate
+                                                    | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="payment-amount">Payment Amount*</label>
+                                                    <input id="payment-amount" type="text" size="10" pInputText autocomplete="off" [(ngModel)]="paymentDetails.paymentAmount"
+                                                        #paymentAmount="ngModel" name="paymentAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="payment-date">Payment Date*</label>
+                                                    <p-calendar id="payment-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="paymentDetails.paymentDate"
+                                                        #paymentDate="ngModel" name="paymentDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="email-addresses">Payment Mode*</label>
+                                                    <p-dropdown id="paymentMode-type" autoWidth="false" [options]="paymentTypeList" [(ngModel)]="paymentDetails.paymentTypeListID"
+                                                        name="paymentModeType" optionLabel="parameterListValue" [autoWidth]="false"
+                                                        ng-required="true" #paymentMode="ngModel" placeholder="Select an option"></p-dropdown>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="payment-particulars">Payment Particulars</label>
+                                                    <input id="payment-particulars" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="paymentDetails.paymentParticulars"
+                                                        #paymentParticulars="ngModel" name="paymentParticulars" maxlength="20">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label for="payment-notes">Notes</label>
+                                                    <input id="payment-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="paymentDetails.notes" #paymentNotes="ngModel"
+                                                        name="paymentNotes" maxlength="500">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label>Additional Email Address</label>
+                                                    <input id="amountDue1" type="text" pInputText ng-required="true" [(ngModel)]=payloadBean.searchParameter #searchParameter="ngModel"
+                                                        name="searchParameter" maxlength="500" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closePaymentDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingPaymentAmount=='0') || (paymentEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)) "></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalPaymentAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Payment Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{addedPaymentAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Pending Payment Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingPaymentAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="ui-g-12 ui-md-3">
+                                                                      
+                                                              </div>   -->
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="paymentSearch" [columns]="paymentcols" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15]"
+                                        [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Payment Details" (click)="editPaymentDetails(rowData[col.id])" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                            icon="fa fa-edit" pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+
+
+                        </p-tabPanel>
+
+                        <!-- End of Payment Details -->
+                        <!-- Supplier POs Tab  -->
+                        <p-tabPanel header="Supplier PO" id="supplier-po" leftIcon="fa-check" *ngIf="this.editFlag" [disabled]="tabFlag4">
+                            <div class="ui-g form-group">
+                                <div class="ui-g-12 ui-md-2"> </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <h2 class="center-align">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/projects"></button>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-6">
+                                        <button type="button" pButton label="Add Supplier PO" icon="fa fa-plus" (click)="showSuplierPODialog()" [disabled]="!roleRightsGuard.roleRights.insertAccess"></button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="card card-w-title">
+                                <p-table #dt [value]="supplierPOSearch" [scrollable]="true" scrollHeight="250px" [columns]="supplierpocolsOne" [paginator]="true"
+                                    [rows]="10" [(selection)]="selectedSupplierPOs" [rowsPerPageOptions]="[10,20,30]" [responsive]="true">
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData">
+                                            <td>
+                                                <button type="button" title="Edit Suplier PO" [disabled]="!roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="editSupplierPO(rowData.poID)" icon="fa fa-edit" pButton></button>&nbsp;&nbsp;{{rowData.businessName}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.boqItemName }}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.poDate | dateFormat}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.poNo}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.basicAmount}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.taxAmount}}
+                                            </td>
+                                            <td class="center-align">
+                                                {{rowData.totalAmount}}
+                                            </td>
+                                            <td>
+                                                {{rowData.poStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Generate Fund Request" [disabled]="(rowData.poStatus!='Approved' && rowData.poStatus!='Partial Approved') || oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="showSupplierFRDialog(rowData.poID)" icon="fa fa-edit" pButton></button>
+                                                {{rowData.frStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Update Payment Details" [disabled]="rowData.frStatus=='None' || oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="showSupplierPaymentDetails(rowData.poID) " icon="fa fa-edit" pButton></button>
+                                                {{rowData.paymentStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Cancel PO" [disabled]="oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled' "
+                                                    (click)="CancleStatus(rowData.poID,rowData) " icon="fa fa-edit" pButton></button>
+                                                {{"Cancel/Partial Cancel"}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Update Invoice Details" [disabled]="(rowData.poStatus!='Approved' && rowData.poStatus!='Partial Approved') || oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled'"
+                                                    (click)="showAddSupplierPOInvoiceDialog(rowData.poID)" icon="fa fa-edit"
+                                                    pButton></button>
+                                                {{rowData.invoiceStatus}}
+                                            </td>
+                                            <td>
+                                                <button type="button" title="Mail Reminder" [disabled]="oneTimeClick || !roleRightsGuard.roleRights.updateAccess || rowData.poStatus=='Cancelled' || rowData.poStatus=='Partial Cancelled' || rowData.invoiceStatus=='Completed' || rowData.invoiceStatus=='None'"
+                                                    (click)="reminderIcon1(rowData.poID,rowData) " icon="fa fa-edit" pButton></button>
+                                                {{"Mail Reminder"}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <p-dialog header="{{poheader}}" ng-class="dialog-Control height-control" [(visible)]="displaySupplierPODialog" [responsive]="true"
+                                showEffect="fade" [modal]="true" [width]="1270" [contentStyle]="{'max-height':'650px'}">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="addSupplier()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-2">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <h2 class="center-align">{{project.contactID.businessName}}&nbsp;({{project.siteName}}-{{project.siteID}})&nbsp;{{project.categoryID.categoryName}}</h2>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="supplierPos.poStatus=='Approved' || supplierPos.poStatus=='Rejected'||(supplierPOsEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="supplier-name">Supplier Name*</label>
+                                                    <p-autoComplete [(ngModel)]="supplierPos.contactID" [suggestions]="filteredSupplierSingle" (completeMethod)="filteredSupplierSingleMethod($event)"
+                                                        [size]="30" [minLength]="1" placeholder="Hint: type any letter" dropdown="cagatay"
+                                                        #businessName="ngModel" field="businessName" name="businessName" [forceSelection]="true"
+                                                        [readonly]="supplierPOsEditFlag">
+                                                    </p-autoComplete>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="supplier-activity-type">BOQ Items*</label>
+                                                    <!-- <p-dropdown autoWidth="false" [options]="supplieractivityTypeList" [(ngModel)]="supplierPos.activityTypeListID" optionLabel="parameterListValue"
+                                                        [autoWidth]="false" name="supplierActivityType" #supplierActivityType="ngModel"
+                                                        placeholder="Select An Option" [readonly]="supplierPOsEditFlag"></p-dropdown> -->
+                                                    <p-autoComplete id="driver-name" [suggestions]="supplierActivity" (completeMethod)="supplierActivityType($event)" [minLength]="1"
+                                                        placeholder="Hint: type any letter" [(ngModel)]="supplierPos.activityTypeListID"
+                                                        #activityTypeListID="ngModel" field="parameterListValue" [readonly]="supplierPOsEditFlag"
+                                                        name="activityTypeListID" dropdown="cagatay" [forceSelection]="true">
+                                                    </p-autoComplete>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="supplier-po-date">PO Date*</label>
+                                                    <p-calendar id="supplier-po-date" [dateFormat]="dateFormat" placeholder="Date" readonlyInput="true" [(ngModel)]="supplierPos.poDate"
+                                                        #supplierPODate="ngModel" name="supplierPODate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="supplier-po-number">PO No.*</label>
+
+                                                    <input id="supplier-po-number" type="text" size="30" [readonly]="true" placeholder="Auto Generated PO" pInputText autocomplete="off"
+                                                        [(ngModel)]="supplierPos.poNo" #supplierpoNo="ngModel" name="supplierpoNo"
+                                                        maxlength="20">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label for="supplier-po-notes">Notes</label>
+                                                    <input id="supplier-po-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="supplierPos.notes" #notes="ngModel"
+                                                        name="notes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p-table [value]="supplierDrawingItems" [scrollable]="true" scrollHeight="135px" [columns]="supplierpocolsTwo" [paginator]="true"
+                                            [rows]="10" [(selection)]="selectedSupplierdrawings" [rowsPerPageOptions]="[10,20,30]"
+                                            [responsive]="true" (onRowSelect)="onRowSelect()" (onRowUnselect)="onRowUnSelect($event)">
+
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th style="width: 3.25em">
+                                                    </th>
+                                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                        {{col.header}}
+                                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                                <tr [pSelectableRow]="rowData">
+                                                    <td style="width:46px;">
+                                                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                                    </td>
+                                                    <td>{{rowData.itemName}}</td>
+                                                    <td>{{rowData.itemUnit}}</td>
+                                                    <td>{{rowData.itemQty}}</td>
+                                                    <td>{{rowData.budgetAmount}}</td>
+                                                    <td>{{rowData.qtyApprovedforProcurement}}</td>
+                                                    <td>{{rowData.alreadySpent}}</td>
+                                                    <td>{{rowData.itemUnitRate}}</td>
+                                                    <!-- <td *ngIf="rowData.alreadySpent==null">{{0}}</td> Ord Qty
+                                                                          <td *ngIf="rowData.qtyApprovedforProcurement!=null">{{rowData.qtyApprovedforProcurement}}</td>  
+                                                                          <td *ngIf="rowData.alreadySpent==null">{{0}}</td> Ord Amt
+                                                                          <td *ngIf="rowData.alreadySpent!=null">{{rowData.alreadySpent}}</td>  
+                                                                          <td *ngIf="rowData.itemUnitRate==null">{{0}}</td>
+                                                                          <td *ngIf="rowData.itemUnitRate!=null">{{rowData.itemUnitRate}}</td>    
+                                                                                                                                                   -->
+                                                    <td pEditableColumn>
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input type="text" pInputText [(ngModel)]="rowData.newProcurementQty" #newProcurementQty="ngModel" autocomplete="off" name="newProcurementQty"
+                                                                    maxlength="20" (keyup)="onRowSelect()" [readonly]="rowData.newProcurementQty==null">
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                <span style="line-height: 30px;"> {{rowData.newProcurementQty}} </span>
+                                                                <button type="button" title="Edit Suplier" icon="fa fa-edit" pButton></button>
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <td pEditableColumn>
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input type="text" pInputText [(ngModel)]="rowData.currentUnitRate" #currentUnitRate="ngModel" autocomplete="off" name="currentUnitRate"
+                                                                    maxlength="20" (keyup)="onRowSelect()" [readonly]="rowData.newProcurementQty==null">
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                <span style="line-height: 30px;">{{rowData.currentUnitRate}}</span>
+                                                                <button type="button" title="Edit Suplier" icon="fa fa-edit" pButton></button>
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <td pEditableColumn>
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                <input type="text" pInputText [(ngModel)]="rowData.currentUnitGST" #currentUnitGST="ngModel" autocomplete="off" name="currentUnitGST"
+                                                                    maxlength="20" (keyup)="onRowSelect()" [readonly]="rowData.currentUnitGST==null">
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                <span style="line-height: 30px;"> {{rowData.currentUnitGST}} </span>
+                                                                <button type="button" title="Edit Suplier" icon="fa fa-edit" pButton></button>
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <td>{{rowData.amount}}</td>
+                                                    <!--New Amt-->
+
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage" let-columns>
+                                                <tr>
+                                                    <td [attr.colspan]="columns.length">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        <div class="ui-g">
+                                            <div class="ui-g-12 ui-md-4">
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="basic-amount">Basic Amount:</label>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <span>{{supplierPos.basicAmount}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="gst">GST:</label>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <span>{{supplierPos.taxAmount}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="invoice-notes">Total Amount:</label>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <span>{{supplierPos.totalAmount}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </p-dialog>
+
+                            <!--Supplier FR Status Dialog-->
+
+
+                            <p-dialog header="{{frInvoiceDialogHeader}}" [(visible)]="displaySupplierFRDialog" [responsive]="true" showEffect="fade"
+                                [modal]="true" [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="addSupplierFundRequest()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align bold-icon">
+                                                    <span></span>{{CustomerName}}-{{activityLabel}}&nbsp;(PO No.:{{supplierPos.poNo}}
+                                                    &nbsp;Dated:{{supplierPos.poDate | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="fr-amount">FR Amount*</label>
+                                                    <input id="fr-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="frDetails.frAmount" #frAmount="ngModel"
+                                                        name="frAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="fr-date">FR Date*</label>
+                                                    <p-calendar id="fr-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="frDetails.frDate" #frDate="ngModel"
+                                                        name="frDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label for="email-addresses">Email Addresses*</label>
+                                                    <input id="email-addresses" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="frDetails.emailAddresses" #emailAddesses="ngModel"
+                                                        name="emailAddesses" maxlength="500">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label for="fr-notes">Notes</label>
+                                                    <input id="fr-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="frDetails.notes" #notes="ngModel" name="notes"
+                                                        maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeSupplierFrDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingFrAmount=='0') || (FrEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total PO Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <!-- <span>{{supplierPos.basicAmount}}</span> -->
+                                                <span>{{supplierPos.totalAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalFrAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Pending Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingFrAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="frSearch" [columns]="frcols" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15]" [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Fund Request" (click)="editFR(rowData[col.id])" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                            pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                            <!-- test -->
+                            <p-dialog header="{{paymentInvoiceDialogHeader}}" [(visible)]="CancleDialog" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="cancelPO()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-8">
+                                                            <label for="invoice-notes">Total PO Amount:</label>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                            <span>{{totalPaymentAmount}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-8">
+                                                            <label for="invoice-notes">Total Payment Amount:</label>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                            <span>{{addedPaymentAmount}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <div class="ui-g-12 ui-md-8">
+                                                            <label for="invoice-notes">Pending Payment Amount:</label>
+                                                        </div>
+                                                        <div class="ui-g-12 ui-md-4">
+                                                            <span>{{pendingPaymentAmount}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+
+
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="payment-notes">Po Status</label>
+                                                    <!-- <p-dropdown id="job-status" [options]="poStatus" [autoWidth]="false" [(ngModel)]="purchaseOrdersBean.poStatus" name="poStatus"
+                                                        #poStatus="ngModel" placeholder="Select an option"></p-dropdown> -->
+                                                    <input id="payment-notes" type="text" disabled size="30" pInputText [(ngModel)]="purchaseOrdersBean.poStatus" #poStatus="ngModel"
+                                                        name="poStatus">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <label for="payment-notes">Cancel Notes</label>
+                                                    <input id="payment-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="paymentDetails.notes" #paymentNotes="ngModel"
+                                                        name="paymentNotes" maxlength="500">
+                                                </div>
+                                                <div class="ui-g-11 ui-md-2">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeCancleStatusDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-11 ui-md-2">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingPaymentAmount=='0') || (paymentEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-12 ui-md-8"></div>
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                            <!-- Reminder icon -->
+
+                            <p-dialog header="{{paymentInvoiceDialogHeader}}" [(visible)]="reminderFlag1" [responsive]="true" showEffect="fade" [modal]="true"
+                                [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="ReminderMails1()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <label>Additional Email Address*</label>
+                                                    <input id="amountDue1" type="text" pInputText ng-required="true" [(ngModel)]=payloadBean.searchParameter #searchParameter="ngModel"
+                                                        name="searchParameter" maxlength="500" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeCancleReminderDialog1()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-2">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]=""></button>
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12">
+                                                <div class="ui-g-12 ui-md-8"></div>
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                            <!-- end  -->
+                            <!--Supplier payment Status Dialog-->
+
+                            <p-dialog header="{{paymentInvoiceDialogHeader}}" [(visible)]="displaySupplierPaymentDialog" [responsive]="true" showEffect="fade"
+                                [modal]="true" [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="addSupplierPaymentDetails()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align bold-icon">
+                                                    <span></span>{{activityLabel}}&nbsp;(PO No.:{{supplierPos.poNo}} &nbsp;Dated:{{supplierPos.poDate
+                                                    | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="payment-amount">Payment Amount*</label>
+                                                    <input id="payment-amount" type="text" size="10" pInputText autocomplete="off" [(ngModel)]="paymentDetails.paymentAmount"
+                                                        #paymentAmount="ngModel" name="paymentAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="payment-date">Payment Date*</label>
+                                                    <p-calendar id="payment-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="paymentDetails.paymentDate"
+                                                        #paymentDate="ngModel" name="paymentDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="email-addresses">Payment Mode*</label>
+                                                    <p-dropdown id="paymentMode-type" autoWidth="false" [options]="paymentTypeList" [(ngModel)]="paymentDetails.paymentTypeListID"
+                                                        name="paymentModeType" optionLabel="parameterListValue" [autoWidth]="false"
+                                                        ng-required="true" #paymentMode="ngModel" placeholder="Select an option"></p-dropdown>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="payment-particulars">Payment Particulars</label>
+                                                    <input id="payment-particulars" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="paymentDetails.paymentParticulars"
+                                                        #paymentParticulars="ngModel" name="paymentParticulars" maxlength="20">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label for="payment-notes">Notes</label>
+                                                    <input id="payment-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="paymentDetails.notes" #paymentNotes="ngModel"
+                                                        name="paymentNotes" maxlength="500">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+                                                    <label>Additional Email Address</label>
+                                                    <input id="amountDue1" type="text" pInputText ng-required="true" [(ngModel)]=payloadBean.searchParameter #searchParameter="ngModel"
+                                                        name="searchParameter" maxlength="500" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeSupplierPaymentDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingPaymentAmount=='0') || (paymentEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalPaymentAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Payment Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{addedPaymentAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Pending Payment Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingPaymentAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="paymentSearch" [columns]="paymentcols" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15]"
+                                        [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Payment Details" (click)="editPaymentDetails(rowData[col.id])" icon="fa fa-edit" [disabled]="!roleRightsGuard.roleRights.updateAccess"
+                                                            pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+
+                            <!--Supplier Invoice Status Dialog-->
+
+                            <p-dialog header="{{contractorPoInvoiceDialogHeader}}" [(visible)]="displaySupplierPOAddInvoiceDialog" [responsive]="true"
+                                showEffect="fade" [modal]="true" [width]="1000">
+                                <div class="ui-g ui-fluid">
+                                    <form novalidate #f="ngForm" (ngSubmit)="AddSupplierPOInvoice()">
+                                        <div class="ui-g form-group">
+                                            <div class="ui-g-12 ui-md-12">
+                                                <h2 class="center-align bold-icon" *ngIf="this.contractorPOFlag">
+                                                    <span></span>{{activityLabel}}&nbsp;(PO No.:{{supplierPos.poNo}} &nbsp;Dated:{{supplierPos.poDate
+                                                    | dateFormat}})</h2>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-no">Invoice No.*</label>
+                                                    <input id="invoice-no" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.invoiceNo" #invoiceNo="ngModel"
+                                                        name="invoiceNo" maxlength="20">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-date">Invoice Date*</label>
+                                                    <p-calendar id="invoice-date" [dateFormat]="dateFormat" placeholder="Date" autocomplete="off" [(ngModel)]="invoiceDetails.invoiceDate"
+                                                        #invoiceDate="ngModel" name="invoiceDate" [showIcon]="true"></p-calendar>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="invoice-amount">Invoice Amount*</label>
+                                                    <input id="invoice-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="prepareInvoiceTotal()" [(ngModel)]="invoiceDetails.invoiceAmount"
+                                                        #invoiceAmount="ngModel" name="invoiceAmount" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="gst-amount">GST Amount*</label>
+                                                    <input id="gst-amount" type="text" size="30" pInputText autocomplete="off" (keyup)="prepareInvoiceTotal()" [(ngModel)]="invoiceDetails.gst"
+                                                        #invoiceGST="ngModel" name="invoiceGST" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-g-12 ui-md-3">
+                                                    <label for="tot-amount">Total Amount</label>
+                                                    <input id="tot-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.totalAmount" #invoiceTotal="ngModel"
+                                                        readonly name="invoiceTotal" maxlength="10" pKeyFilter="int">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-9">
+                                                    <label for="invoice-notes">Notes</label>
+                                                    <input id="invoice-notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="invoiceDetails.notes" #invoiceNotes="ngModel"
+                                                        name="invoiceNotes" maxlength="500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                                <div class="ui-g-12 ui-md-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-g-12 ui-md-4">
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="button" pButton icon="fa-close" (click)="closeSupplierInvoiceDialog()" label="Close"></button>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-4">
+                                                    <button type="submit" pButton icon="fa-check" label="Save" [disabled]="(pendingInvoiceAmount=='0') || (InvoiceEditFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess))"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Fund Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{totalFrAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total PO Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{supplierPos.totalAmount}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Total Invoice Received Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{addedSupplierInvoice}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <div class="ui-g-12 ui-md-8">
+                                                <label for="invoice-notes">Pending Invoice Amount:</label>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span>{{pendingInvoiceAmount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="ui-g-12 ui-md-3">
+                                                                            
+                                                                    </div>   -->
+                                </div>
+                                <div class="card card-w-title">
+                                    <p-table #dt [value]="invoiceSearch" [columns]="invoicecols" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,15]"
+                                        [responsive]="true">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                    {{col.header}}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr [pSelectableRow]="rowData">
+
+                                                <td *ngFor="let col of columns; let idx=index" [ngClass]="col.class">
+                                                    <span *ngIf="idx == 0">
+                                                        <button type="button" title="Edit Invoice" (click)="editInvoice(rowData[col.id])" icon="fa fa-edit" pButton></button>&nbsp;&nbsp; {{rowData[col.field]}}
+                                                    </span>
+                                                    <span *ngIf="idx==1">
+                                                        {{rowData[col.field] | dateFormat}}
+                                                    </span>
+                                                    <span *ngIf="idx > 1">
+                                                        {{rowData[col.field]}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="columns.length">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="msg">
+                                    <p-growl [(value)]="dialogmsgs"></p-growl>
+                                </div>
+                            </p-dialog>
+                        </p-tabPanel>
+                    </p-tabView>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="custom-overlay" *ngIf="showSpinner">
+    <div class="sendingEmail"></div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+    <div class="sendingEmail-all"></div>
+</div>
+<div class="msg">
+    <p-growl [(value)]="msgs"></p-growl>
+</div>
+<!--<div class="loader" *ngIf="showPageSpinner">
+    <div>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>-->
+<!-- <p-progressSpinner  *ngIf="showPageSpinner" class="progress-bar" [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s" ></p-progressSpinner> -->

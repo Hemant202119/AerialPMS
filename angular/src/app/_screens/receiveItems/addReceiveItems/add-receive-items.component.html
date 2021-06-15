@@ -1,0 +1,268 @@
+<div class="ui-fluid">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="card no-margin">
+        <h1>{{formHeader}}</h1>
+        <form novalidate #f="ngForm" (ngSubmit)="ItemsInformation()">
+          <div class="ui-g form-group">
+            <div class="ui-g-12 ui-md-6">
+            </div>
+            <div class="ui-g-12 ui-md-6">
+              <div class="ui-g-12 ui-md-4"></div>
+              <div class="ui-g-12 ui-md-4">
+                <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/receive-items"> </button>
+              </div>
+              <div class="ui-g-12 ui-md-4">
+                <button type="submit"  pButton label="Save" icon="fa fa-check" [disabled]="editFlag==true?(!roleRightsGuard.roleRights.updateAccess):(!roleRightsGuard.roleRights.insertAccess)" ></button>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+              <p-accordion [multiple]="true">
+                <p-accordionTab header="Item Information" [selected]="true">
+                  <div class="ui-g-12 ui-md-12">
+
+                      <div class="ui-g-12 ui-md-3">
+                          <label for="project-name">Project Name*</label>
+                          <p-autoComplete [(ngModel)]="itemsInformationBean.project" [suggestions]="filteredProjectItem" (completeMethod)="filterProjectSingleItem($event)"
+                          [size]="20" [minLength]="1" placeholder="Hint: type any letter" id="item-name" tabindex="10" (onClear)="itemsInformationBean.project=undefined"
+                          #project="ngModel" field="projectName" name="project" dropdown="cagatay" [forceSelection]="true"  [readonly]="editFlag">
+                      </p-autoComplete>                      
+                        </div>
+
+                      <div class="ui-g-12 ui-md-3">
+                          <label for="business-name">Supplier Name*</label>
+                          <p-autoComplete [(ngModel)]="itemsInformationBean.contact" [suggestions]="filteredContactItem" (completeMethod)="filterContactsSingleItem($event)"
+                          [size]="20" [minLength]="1" placeholder="Hint: type any letter" id="item-name" tabindex="10" (onClear)="itemsInformationBean.contact=undefined"
+                          #contact="ngModel" field="businessName" name="contact" dropdown="cagatay" [forceSelection]="true" [readonly]="editFlag">
+                      </p-autoComplete>                      
+                        </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="item-name">Item Name*</label>
+                      <p-autoComplete [(ngModel)]="itemsInformationBean.assetItemId" [suggestions]="filteredSingleItem" (completeMethod)="filterSingleItem($event)"
+                      [size]="20" [minLength]="1" placeholder="Hint: type any letter" id="item-name" tabindex="10" (onClear)="clearItems()"
+                      #itemName="ngModel" field="itemName" name="itemName" dropdown="cagatay" [forceSelection]="true" (onSelect)="dataOfParticularitems($event)" [readonly]="editFlag">
+                  </p-autoComplete>                      
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                        <label for="category-name">Category Name*</label>
+                        <input id="category-name" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.categoryName"
+                          #CategoryName="ngModel" name="categoryName" maxlength="50" tabindex="60">
+                      </div>
+
+                    
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+
+                      <div class="ui-g-12 ui-md-3">
+                          <label for="sub-category-name">Sub Category Name*</label>
+                          <input id="sub-category-name" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.subCategoryName"
+                            #subCategoryName="ngModel" name="subCategoryName" maxlength="50" tabindex="70">
+                        </div>
+                      <!-- <div class="ui-g-12 ui-md-3">
+                          <label for="item-code">Item Code*</label>
+                          <input id="item-code" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.itemCode"
+                            #itemName="ngModel" name="itemCode" maxlength="20"  tabindex="20">
+                        </div> -->
+                        <div class="ui-g-12 ui-md-3">
+                          <label for="item-type">Item Type*</label>
+                          <input id="item-type" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.itemType"
+                            #itemType="ngModel" name="itemType" maxlength="20" tabindex="30">
+                        </div>
+                        <!-- <div class="ui-g-12 ui-md-3">
+                          <label for="item-status">Item Status*</label>
+                          <input id="item-status" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.itemStatus"
+                          #itemStatus="ngModel" name="itemStatus" maxlength="10" tabindex="40">
+                        </div> -->
+                    <div class="ui-g-12 ui-md-6">
+                      <label for="item-description">Item Description</label>
+                      <input id="item-description" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.itemDescription"
+                        #itemDescription="ngModel" name="itemDescription" maxlength="100" tabindex="50">
+                    </div>
+                    
+                    
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                   
+
+                      <div class="ui-g-12 ui-md-3">
+                          <label for="item-unit">Item Unit</label>
+                          <input id="item-unit" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.itemUnit"
+                            #itemUnit="ngModel" name="itemUnit" maxlength="100" tabindex="50">
+                        </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="received-date">Received Date*</label>
+
+
+                      <p-calendar id="received-date" placeholder="Date" [dateFormat]="dateformat" readonlyInput="true" name="receivedDate" [showIcon]="true"
+                        [(ngModel)]="itemsInformationBean.receivedDate" #receivedDate="ngModel" name="receivedDate" tabindex="100"></p-calendar>
+                    </div>
+                    <!-- <div class="ui-g-12 ui-md-3">
+                      <label for="stock-status">Stock Status*</label>
+                      <input id="stock-status" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.stockStatus"
+                        #stockStatus="ngModel" name="stockStatus" maxlength="10" tabindex="110">
+                    </div> -->
+
+                    <div class="ui-g-12 ui-md-3">
+                        <label for="item-stock">Current Project Item Stock</label>
+                        <input id="item-stock" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.currentProjectItemStock" #currentProjectItemStock="ngModel"  
+                           name="currentProjectItemStock" maxlength="100" tabindex="50" readonly="true">
+                      </div>
+
+                        <div class="ui-g-12 ui-md-3">
+                          <label for="item-quantity">New Project Receive Quantity</label>
+                          <input id="item-quantity" type="text" size="30" pInputText autocomplete="off"  [(ngModel)]="itemsInformationBean.itemQuantityReceived"
+                            #itemQuantityReceived="ngModel" name="itemQuantityReceived" maxlength="100" tabindex="50" pKeyFilter="pnum"
+                            (keyup)="calculateBalance($event)" >
+                        </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                      <!-- <div class="ui-g-12 ui-md-3">
+                          <label for="item-used">New Project Used Quantity</label>
+                          <input id="item-used" type="text" size="30" pInputText autocomplete="off"  [(ngModel)]="itemsInformationBean.itemQuantityUsed"
+                            #itemQuantityUsed="ngModel" name="itemQuantityUsed" maxlength="100" tabindex="50" (keyup)="calculateBalance($event)"
+                            (blur)="onBlurUsedQuantity()" pKeyFilter="pnum">
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <label for="item-balance">New Project Balance Quantity</label>
+                            <input id="item-balance" type="text" size="30" pInputText autocomplete="off"  [(ngModel)]="itemsInformationBean.itemQuantityBalance"
+                              #itemQuantityBalance="ngModel" name="itemQuantityBalance" maxlength="100" tabindex="50" pKeyFilter="pnum" readonly="true">
+                          </div> -->
+                   
+                    <div class="ui-g-12 ui-md-3">
+                        <label for="transaction-type">Transaction Type*</label>
+                        <p-dropdown name="transaction-Type" [autoWidth]="false" [options]="transactionTypeList" placeholder="Select an option" [(ngModel)]="itemsInformationBean.transactionType"
+                          maxlength="10"  [readonly]="editFlag" tabindex="140"></p-dropdown>
+                      </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="item-sr-no.">MRN/SRN No.*</label>
+                      <input id="item-sr-no." type="text"  pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.transactionNumber" name="transactionNumber" #transactionNumber="ngModel"
+                        maxlength="500" tabindex="130">
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+                      <label for="notes">Notes</label>
+                      <input id="notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.notes" name="notes"
+                        maxlength="100" tabindex="150">
+                    </div>
+                  </div>
+
+                  
+                  <div class="ui-g-12 ui-md-12">
+                    
+                   
+                  </div>
+                  <!-- </div> -->
+                </p-accordionTab>
+              </p-accordion>
+            </div>
+          </div>
+          <div class="ui-g form-group">            
+            <div class="ui-g-12 ui-md-12">
+              <!-- <p-accordion [multiple]="true">
+                <p-accordionTab header="Purchase Information" [selected]="true" *ngIf="purchasedInformationFlag">
+                  <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="vendor-name">Vendor Name</label>
+                      <input id="vendor-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.vendorName"
+                        name="vendor-name" maxlength="100">
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="purchase-date">Purchase Date</label>
+                     <p-calendar id="purchase-date" placeholder="Date" [dateFormat]="dateformat" readonlyInput="true" [showIcon]="true"
+                        [(ngModel)]="itemsInformationBean.purchasedDate" #purchasedDate="ngModel" name="purchasedDate"></p-calendar>
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="invoice-no.">Invoice No.</label>
+                      <input id="invoice-no." type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.invoiceNumber"
+                        name="invoiceNumber" maxlength="50">
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="purchase-price">Purchase Price</label>
+                      <input id="purchase-price" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.purchasePrice"
+                        name="purchasePrice" pKeyFilter="int">
+                    </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="guaranty-end-date">Guarantee End Date</label>
+                        <p-calendar id="guaranty-end-date" placeholder="Date" [dateFormat]="dateformat" readonlyInput="true" [showIcon]="true"
+                        [(ngModel)]="itemsInformationBean.guarantyEndDate" #guarantyEndDate="ngModel" name="guarantyEndDate"></p-calendar>
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="warranty-end-date"> Warranty End Date</label>                      
+                     <p-calendar id="warranty-end-date" placeholder="Date" [dateFormat]="dateformat" readonlyInput="true" [showIcon]="true"
+                        [(ngModel)]="itemsInformationBean.warrantyEndDate" #warrantyEndDate="ngModel" name="warrantyEndDate"></p-calendar>   
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                      <label for="purchase-remarks">Purchase Remarks</label>
+                      <input id="purchase-remarks" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.purchasedRemarks"
+                        name="purchaseRemarks" maxlength="100">
+                    </div>
+                  </div>
+                  
+               </p-accordionTab>
+              </p-accordion> -->
+            </div> 
+           </div>
+           <div class="ui-g form-group">            
+            <div class="ui-g-12 ui-md-12">
+              <!-- <p-accordion [multiple]="true">
+                <p-accordionTab header="Rent Information" [selected]="true" *ngIf="rentInformationFlag">
+                  <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="vendor-name">Vendor Name</label>
+                      <input id="vendor-name" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.vendorName"
+                        name="vendorName" maxlength="10">
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="rent-security">Rent Security</label>
+                      <input id="rent-security" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.rentalSecurity"
+                        name="rentalSecurity" maxlength="100" pKeyFilter="int">
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="rent-amount">Rent Amount</label>
+                      <input id="rent-amount" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.rentalAmount"
+                        name="rentalAmount" pKeyFilter="int">
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="rent-frequency">Rent Frequency*</label>
+                      <p-dropdown name="rentFrequency" [autoWidth]="false" [options]="rentalFrequencyList" placeholder="Select an option" [(ngModel)]="itemsInformationBean.rentalFrequency"
+                        name="rentalFrequency" maxlength="10"></p-dropdown>
+                    </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="rent-start-date">Rent Start Date</label>                     
+                        <p-calendar id="rent-start-date" placeholder="Date" [dateFormat]="dateformat" readonlyInput="true" [showIcon]="true"
+                        [(ngModel)]="itemsInformationBean.rentStartDate" #rentStartDate="ngModel" name="rentStartDate"></p-calendar>   
+                    </div>
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="rent-end-date">Rent End Date</label>                   
+                        <p-calendar id="rent-end-date" placeholder="Date" [dateFormat]="dateformat" readonlyInput="true" [showIcon]="true"
+                        [(ngModel)]="itemsInformationBean.rentEndDate" #rentEndDate="ngModel" name="rentEndDate"></p-calendar> 
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                      <label for="rent-remarks">Rent Remarks</label>
+                      <input id="rent-remarks" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.rentRemarks"
+                        name="rentRemarks" maxlength="100">
+                    </div>
+                  </div>
+                </p-accordionTab>
+              </p-accordion> -->
+            </div>          
+           </div> 
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+  <div class="sendingEmail-all"></div>
+</div>
+<div class="msg">
+  <p-growl [(value)]="msgs"></p-growl>
+</div>
+<p-confirmDialog header="Confirmation" icon="fa fa-info" width="425"></p-confirmDialog>

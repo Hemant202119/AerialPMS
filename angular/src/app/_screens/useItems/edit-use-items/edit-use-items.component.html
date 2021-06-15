@@ -1,0 +1,168 @@
+<div class="ui-fluid">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <div class="card no-margin">
+        <h1>{{formHeader}}</h1>
+        <form novalidate #f="ngForm" (ngSubmit)="SaveUpdate()">
+          <div class="ui-g form-group">
+            <div class="ui-g-12 ui-md-6">
+            </div>
+            <div class="ui-g-12 ui-md-6">
+              <div class="ui-g-12 ui-md-4"></div>
+              <div class="ui-g-12 ui-md-4">
+                <button type="button" pButton label="Cancel" icon="fa fa-times" routerLink="/manage-use-items"> </button>
+              </div>
+              <div class="ui-g-12 ui-md-4">
+                <button type="submit"  pButton label="Save" icon="fa fa-check" [disabled]="saveFlag ||  !roleRightsGuard.roleRights.updateAccess"  ></button>
+              </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+              <p-accordion [multiple]="true">
+                <p-accordionTab header="Item Information" [selected]="true">
+                  <div class="ui-g-12 ui-md-12">
+
+                    <div class="ui-g-12 ui-md-3">
+                        <label for="project-name">Project Name*</label>
+                        <input id="project-name" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.projectName"
+                          #projectName="ngModel" name="projectName" maxlength="50" tabindex="60">
+                      </div>
+
+                      <div class="ui-g-12 ui-md-3">
+                        <label for="supplier-name">Supplier Name*</label>
+                        <input id="supplier-name" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.businessName"
+                          #businessName="ngModel" name="businessName" maxlength="50" tabindex="60">
+                      </div>
+
+                      <div class="ui-g-12 ui-md-3">
+                        <label for="item-name">Item Name & Unit*</label>
+                        <input id="item-name" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.itemNameUnit"
+                          #itemNameUnit="ngModel" name="itemNameUnit" maxlength="50" tabindex="60">
+                      </div>
+
+                      <div class="ui-g-12 ui-md-3">
+                        <label for="received-date">Received Date*</label>
+                        <input id="received-date" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.receivedDate"
+                          #receivedDate="ngModel" name="receivedDate" maxlength="50" tabindex="60">
+                      </div>
+
+                    
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+
+                      <div class="ui-g-12 ui-md-3">
+                          <label for="quantity-received">Quantity Received*</label>
+                          <input id="quantity-received" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.quantityReceived"
+                            #quantityReceived="ngModel" name="quantityReceived" maxlength="50" tabindex="70">
+                        </div>
+                     
+                        <div class="ui-g-12 ui-md-3">
+                          <label for="quantity-used">Quantity Used*</label>
+                          <input id="quantity-used" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.quantityUsed"
+                            #quantityUsed="ngModel" name="quantityUsed" maxlength="50" tabindex="70" >
+                        </div>
+                        
+                        <div class="ui-g-12 ui-md-3">
+                          <label for="quantity-wasted">Quantity Wasted*</label>
+                          <input id="quantity-wasted" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.quantityWasted"
+                            #quantityWasted="ngModel" name="quantityWasted" maxlength="50" tabindex="70">
+                        </div>
+
+                        <div class="ui-g-12 ui-md-3">
+                          <label for="quantity-balance">Quantity Balance*</label>
+                          <input id="quantity-balance" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.quantityBalance"
+                            #quantityBalance="ngModel" name="quantityBalance" maxlength="50" tabindex="70">
+                        </div>
+                    
+                    
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="usedDate">Used Date*</label>
+                      <p-calendar id="usedDate"  [(ngModel)]="itemsInformationBean.usedDate" #usedDate="ngModel" name="usedDate"
+                        [showIcon]="true" [dateFormat]="dateformat" [disabled]="true"></p-calendar>
+                    </div>
+                   
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="usage-type">Usage Type*</label>
+                      <p-dropdown name="usage-Type" [autoWidth]="false" [options]="usageTypeList" placeholder="Select an option" [(ngModel)]="itemsInformationBean.usageType"
+                          tabindex="140" (onChange)="enableDisabledFields($event)"></p-dropdown>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="project-name">Project Name*</label>
+                      <p-autoComplete [(ngModel)]="itemsInformationBean.project" [suggestions]="filteredProjectItem" (completeMethod)="filterProjectSingleItem($event)"
+                      [size]="20" [minLength]="1" placeholder="Hint: type any letter" id="item-name" tabindex="10" (onClear)="itemsInformationBean.project=undefined"
+                      #project="ngModel" field="projectName" name="project" dropdown="cagatay" [forceSelection]="true"  [readonly]="itemsInformationBean.usageType!='Transferred To Other Project'">
+                  </p-autoComplete>                      
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="business-name">Supplier Name*</label>
+                      <p-autoComplete [(ngModel)]="itemsInformationBean.contact" [suggestions]="filteredContactItem" (completeMethod)="filterContactsSingleItem($event)"
+                      [size]="20" [minLength]="1" placeholder="Hint: type any letter" id="item-name" tabindex="10" (onClear)="itemsInformationBean.contact=undefined"
+                      #contact="ngModel" field="businessName" name="contact" dropdown="cagatay" [forceSelection]="true" [readonly]="itemsInformationBean.usageType!='Returned'">
+                  </p-autoComplete>                      
+                    </div>
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                     
+                   
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="used-trnasfer-return.">Quantity Used / Transferred / Returned*</label>
+                      <input id="used-trnasfer-return" type="text"  pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.itemQuantityUsed" name="itemQuantityUsed" #itemQuantityUsed="ngModel"
+                        maxlength="500" tabindex="130"  pKeyFilter="pnum">
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="quantity-wasted">Quantity Wasted*</label>
+                      <input id="quantity-wasted" type="text" size="30" pInputText autocomplete="off" (keyup)="calculateWastedPercentage()" [(ngModel)]="itemsInformationBean.itemQuantityWasted"
+                        #itemQuantityWasted="ngModel" name="itemQuantityWasted" maxlength="50" tabindex="70"  pKeyFilter="pnum" itemsInformationBean.quantityReceived>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="per-wasted">Wasted Percentage*</label>
+                      <input id="per-wasted" type="text" size="30" pInputText autocomplete="off" [readonly]="true" [(ngModel)]="itemsInformationBean.wastedPercentage"
+                        #wastedPercentage="ngModel" name="wastedPercentage" maxlength="50" tabindex="70"  pKeyFilter="pnum">
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3">
+                      <label for="notes">Notes</label>
+                      <input id="notes" type="text" size="30" pInputText autocomplete="off" [(ngModel)]="itemsInformationBean.notes" name="notes"
+                        maxlength="100" tabindex="150">
+                    </div>
+                  </div>
+
+                  
+                  <div class="ui-g-12 ui-md-12">
+                    
+                   
+                  </div>
+                 
+                </p-accordionTab>
+              </p-accordion>
+            </div>
+          </div>
+          <div class="ui-g form-group">            
+            <div class="ui-g-12 ui-md-12">
+              
+            </div> 
+           </div>
+           <div class="ui-g form-group">            
+            <div class="ui-g-12 ui-md-12">
+             
+            </div>          
+           </div> 
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="custom-overlay-all" *ngIf="showPageSpinner">
+  <div class="sendingEmail-all"></div>
+</div>
+<div class="msg">
+  <p-growl [(value)]="msgs"></p-growl>
+</div>
+<p-confirmDialog header="Confirmation" icon="fa fa-info" width="425"></p-confirmDialog>

@@ -1,0 +1,66 @@
+.bold-icon{
+    font-weight: bold;
+}
+.status-date{
+    width: 8.25em !important;
+    text-align: center !important;
+}
+.status-name{
+    width: 8.25em !important;
+    text-align: center !important;
+}
+.status-note{
+    width:20.25em !important;
+}
+.dialog-Control{
+    top:60px !important;    
+}
+.ui-table-scrollable-header.ui-widget-header{
+    margin-right: 17px !important; margin-left: 0px;
+}
+.custom-overlay{
+    width:100vw;
+    height:100vh;
+    top:0px;
+    left:0px;
+    bottom: 0px;
+    position: absolute;
+    pointer-events: none;
+    z-index:99999999;
+}
+.custom-overlay:before{
+    content:'';
+    width:100%;
+    height:100vh;
+    position:absolute;
+    top:0;
+    left:0;
+    bottom: 0px;
+    opacity:0.8;
+    pointer-events: auto;
+    background-color: #ccc;
+}
+.sendingEmail{
+    background-image: url('assets/layout/images/sending-mail.gif');
+    width:244px;
+    height:127px;
+    z-index:9999999999;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+/** Dialog for All **/
+
+
+/* p-dialog.dialog-Control.height-control .ui-dialog.ui-widget.ui-widget-content[role="dialog"]{
+    top:15px !important;
+} */
+.dialog-Control.height-control .ui-dialog{
+    top:15px !important;
+}
+
+.ui-g-11.ui-md-2{
+height: 2%
+}
